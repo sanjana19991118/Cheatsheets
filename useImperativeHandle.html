@@ -675,6 +675,15 @@
   <span class="fn">fn</span>
 }), [value]);</pre>
         <div class="card-body">Recreates when <code>value</code> changes. Most correct when the factory captures state or props.</div>
+        <p>Here's your 5-minute cheatsheet. Key things to remember:
+
+**The one-liner:** `useImperativeHandle` lets a child component control exactly what a parent gets when it holds a `ref` — instead of the raw DOM node, the parent sees a curated API you define.
+
+**Three things always required:** `forwardRef` on the component, the forwarded `ref` as the second argument, and calling `useImperativeHandle(ref, factory, deps)` inside.
+
+**When to reach for it:** Triggering imperative actions (focus, play, scroll, reset) from a parent. If you're tempted to use it for data flow, use state and props instead.
+
+The React 19 section covers the new syntax where `forwardRef` is dropped entirely and `ref` arrives as a plain prop.</p>
       </div>
     </div>
   </section>
