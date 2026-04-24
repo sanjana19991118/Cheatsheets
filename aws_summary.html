@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AWS Cheat Sheet Summary</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; line-height: 1.5; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+        h1 { color: #232f3e; border-bottom: 3px solid #ff9900; padding-bottom: 10px; }
+        h2 { color: #232f3e; margin-top: 30px; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fafafa; }
+        .card h3 { margin-top: 0; color: #ff9900; }
+        .code { background: #232f3e; color: #fff; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        .diagram { display: flex; align-items: center; justify-content: space-around; background: #eef; padding: 20px; border: 2px dashed #999; margin: 20px 0; border-radius: 10px; }
+        .box { padding: 10px; background: #fff; border: 1px solid #333; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>AWS Cheat Sheet: Absolute Beginner Guide</h1>
+    <p>AWS provides over 200 fully-featured services. Here is the categorized summary to get you started in 5 minutes.</p>
+
+    <h2>Architecture Flow</h2>
+    <div class="diagram">
+        <div class="box">User</div> &rarr; 
+        <div class="box">Route 53 (DNS)</div> &rarr; 
+        <div class="box">CloudFront (CDN)</div> &rarr; 
+        <div class="box">EC2 / Lambda (Compute)</div> &rarr; 
+        <div class="box">RDS / DynamoDB (Storage)</div>
+    </div>
+
+    <h2>Core Service Ecosystem</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Compute</h3>
+            <ul>
+                <li><strong>EC2:</strong> Virtual Servers.</li>
+                <li><strong>Lambda:</strong> Serverless code execution.</li>
+                <li><strong>ECS:</strong> Container management.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Storage & DB</h3>
+            <ul>
+                <li><strong>S3:</strong> Object storage (files).</li>
+                <li><strong>RDS:</strong> Relational SQL DB.</li>
+                <li><strong>DynamoDB:</strong> NoSQL fast DB.</li>
+                <li><strong>EBS:</strong> Block storage for EC2.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Infrastructure & Management</h3>
+            <ul>
+                <li><strong>VPC:</strong> Isolated private network.</li>
+                <li><strong>IAM:</strong> User/Access permissions.</li>
+                <li><strong>CloudFormation:</strong> Infrastructure as Code (IaC).</li>
+                <li><strong>CloudWatch:</strong> Monitoring & logs.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Specialized</h3>
+            <ul>
+                <li><strong>Route 53:</strong> DNS services.</li>
+                <li><strong>CloudFront:</strong> Global content delivery.</li>
+                <li><strong>Redshift:</strong> Data warehousing.</li>
+                <li><strong>Cognito:</strong> User authentication.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Essential CLI Commands</h2>
+    <p>Use the CLI to control your infrastructure programmatically.</p>
+    <table>
+        <tr><th>Command Category</th><th>Example Usage</th></tr>
+        <tr><td>Configuration</td><td><code>aws configure</code></td></tr>
+        <tr><td>S3 Management</td><td><code>aws s3 sync ./local s3://bucket</code></td></tr>
+        <tr><td>EC2 Control</td><td><code>aws ec2 run-instances --image-id ami-123</code></td></tr>
+        <tr><td>IAM</td><td><code>aws iam list-users</code></td></tr>
+        <tr><td>Logs</td><td><code>aws logs get-log-events --log-group-name X</code></td></tr>
+    </table>
+
+    <p style="margin-top:20px; font-size: 0.8em; color: #666;"><em>Based on industry standards and common DevOps cheat sheet references.</em></p>
+</div>
+
+</body>
+</html>
