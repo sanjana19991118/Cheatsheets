@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSO — 5-Minute Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #111827;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'IBM Plex Mono', monospace;
+    --head: 'Syne', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--head);
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  header .subtitle {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── GRID ────────────────────────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  ul { padding-left: 0; list-style: none; }
+  ul li { padding: 3px 0 3px 14px; position: relative; color: var(--text); font-size: 12.5px; }
+  ul li::before { content: "›"; position: absolute; left: 0; color: var(--accent); }
+  ul li strong { color: #fff; font-weight: 600; }
+
+  /* ── WHAT IS SSO ─────────────────────────────────── */
+  .card-what { grid-column: 1 / 2; }
+  .definition {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .definition span { color: #fff; font-weight: 600; }
+
+  /* ── FLOW DIAGRAM ────────────────────────────────── */
+  .card-flow { grid-column: 2 / 4; }
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    margin-top: 6px;
+    overflow-x: auto;
+  }
+  .flow-node {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 90px;
+  }
+  .flow-node .icon { font-size: 18px; display: block; margin-bottom: 2px; }
+  .flow-node .label { font-size: 11px; font-weight: 600; color: #fff; }
+  .flow-node .sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .flow-node.highlight { border-color: var(--accent); background: #0c1a2e; }
+  .flow-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    flex-shrink: 0;
+    padding: 0 6px;
+  }
+  .flow-arrow .arr { color: var(--accent2); font-size: 14px; }
+  .flow-arrow .alabel { font-size: 9px; color: var(--muted); font-family: var(--mono); white-space: nowrap; }
+
+  /* Steps below diagram */
+  .steps { margin-top: 12px; }
+  .step-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .step {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+  .step .num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .step .text { color: #94a3b8; }
+  .step .text strong { color: #fff; }
+
+  /* ── PROTOCOLS ───────────────────────────────────── */
+  .card-proto { grid-column: 1 / 2; }
+  .proto-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 6px; }
+  .proto-table th { color: var(--muted); font-weight: 600; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); font-size: 10px; letter-spacing: 0.5px; }
+  .proto-table td { padding: 5px 6px; border-bottom: 1px solid #1a2535; vertical-align: top; }
+  .proto-table tr:last-child td { border-bottom: none; }
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .badge-blue { background: #1e3a5f; color: var(--accent2); }
+  .badge-amber { background: #2d2208; color: var(--accent3); }
+  .badge-green { background: #0d2e1e; color: var(--green); }
+
+  /* ── KEY TERMS ───────────────────────────────────── */
+  .card-terms { grid-column: 2 / 3; }
+  .term { margin-bottom: 8px; }
+  .term dt {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent3);
+    font-weight: 500;
+  }
+  .term dd { font-size: 12px; color: #94a3b8; margin-left: 0; }
+
+  /* ── BENEFITS & RISKS ────────────────────────────── */
+  .card-br { grid-column: 3 / 4; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  .col-head { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .col-green { color: var(--green); }
+  .col-red { color: var(--red); }
+  ul.pro li::before { color: var(--green); }
+  ul.con li::before { color: var(--red); }
+
+  /* ── REAL-WORLD EXAMPLE ──────────────────────────── */
+  .card-example { grid-column: 1 / 3; }
+  .example-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .ex-step {
+    flex: 1;
+    padding: 10px 12px;
+    border-right: 1px solid var(--border);
+    background: #0f172a;
+  }
+  .ex-step:last-child { border-right: none; }
+  .ex-step .who {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .ex-step .action { font-size: 12px; color: #fff; font-weight: 600; margin-bottom: 3px; }
+  .ex-step .detail { font-size: 11px; color: #64748b; }
+  .ex-num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── SECURITY TIPS ───────────────────────────────── */
+  .card-sec { grid-column: 3 / 4; }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    margin-top: 14px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  footer span { display: flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Single Sign-On (SSO)</h1>
+  <span class="tag">5-min reference</span>
+  <span class="subtitle">Protocols · Flow · Terms · Examples</span>
+</header>
+
+<div class="grid">
+
+  <!-- WHAT IS SSO -->
+  <div class="card card-what">
+    <div class="card-title"><span class="dot"></span>What Is SSO?</div>
+    <p class="definition">
+      An authentication scheme where a user logs in <span>once</span> and gains access to <span>multiple apps</span> without re-entering credentials.
+    </p>
+    <ul>
+      <li><strong>Identity Provider (IdP)</strong> — the central login authority (e.g. Okta, Azure AD, Google)</li>
+      <li><strong>Service Provider (SP)</strong> — any app relying on the IdP (Slack, GitHub, Salesforce…)</li>
+      <li><strong>Token / Assertion</strong> — cryptographically signed proof of identity passed between IdP ↔ SP</li>
+      <li><strong>Session</strong> — once authenticated, a shared session eliminates repeated logins</li>
+    </ul>
+  </div>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="card card-flow">
+    <div class="card-title"><span class="dot" style="background:var(--accent2)"></span>How SSO Works — Flow</div>
+    <div class="flow">
+      <div class="flow-node">
+        <span class="icon">👤</span>
+        <div class="label">User</div>
+        <div class="sub">visits app</div>
+      </div>
+      <div class="flow-arrow">
+        <span class="arr">→</span>
+        <span class="alabel">① access request</span>
+      </div>
+      <div class="flow-node">
+        <span class="icon">🖥️</span>
+        <div class="label">Service Provider</div>
+        <div class="sub">Slack / GitHub…</div>
+      </div>
+      <div class="flow-arrow">
+        <span class="arr">→</span>
+        <span class="alabel">② redirect + AuthnRequest</span>
+      </div>
+      <div class="flow-node highlight">
+        <span class="icon">🔐</span>
+        <div class="label">Identity Provider</div>
+        <div class="sub">Okta / Azure AD…</div>
+      </div>
+      <div class="flow-arrow">
+        <span class="arr">→</span>
+        <span class="alabel">③ user logs in once</span>
+      </div>
+      <div class="flow-node highlight">
+        <span class="icon">✅</span>
+        <div class="label">Token Issued</div>
+        <div class="sub">SAML / OIDC</div>
+      </div>
+      <div class="flow-arrow">
+        <span class="arr">→</span>
+        <span class="alabel">④ token posted back</span>
+      </div>
+      <div class="flow-node">
+        <span class="icon">🚪</span>
+        <div class="label">Access Granted</div>
+        <div class="sub">session created</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step-list">
+        <div class="step"><div class="num">Step 1</div><div class="text">User visits <strong>Slack</strong>, not logged in</div></div>
+        <div class="step"><div class="num">Step 2</div><div class="text">Slack redirects to <strong>company IdP</strong> with a request</div></div>
+        <div class="step"><div class="num">Step 3</div><div class="text">IdP checks: <strong>existing session?</strong> If yes → skip login</div></div>
+        <div class="step"><div class="num">Step 4</div><div class="text">IdP issues <strong>signed token</strong>, posts back to Slack</div></div>
+        <div class="step"><div class="num">Step 5</div><div class="text">Slack validates token → grants <strong>access</strong> 🎉</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLS -->
+  <div class="card card-proto">
+    <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Protocols Compared</div>
+    <table class="proto-table">
+      <thead>
+        <tr>
+          <th>Protocol</th>
+          <th>Format</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-blue">SAML 2.0</span></td>
+          <td>XML assertions</td>
+          <td>Enterprise / legacy web apps</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">OAuth 2.0</span></td>
+          <td>JSON tokens</td>
+          <td><em>Authorization</em> (not authn) — API access</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-amber">OIDC</span></td>
+          <td>JWT on OAuth 2.0</td>
+          <td>Modern web & mobile SSO (Google, Apple login)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">Kerberos</span></td>
+          <td>Tickets (binary)</td>
+          <td>On-prem Windows / Active Directory</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">LDAP</span></td>
+          <td>Directory protocol</td>
+          <td>Internal directory lookup (often paired with above)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- KEY TERMS -->
+  <div class="card card-terms">
+    <div class="card-title"><span class="dot" style="background:var(--accent3)"></span>Key Terms</div>
+    <dl>
+      <div class="term">
+        <dt>IdP (Identity Provider)</dt>
+        <dd>The trusted system that authenticates users — e.g. Okta, Azure AD, Google Workspace.</dd>
+      </div>
+      <div class="term">
+        <dt>SP (Service Provider)</dt>
+        <dd>The app user wants to access — trusts the IdP to vouch for the user.</dd>
+      </div>
+      <div class="term">
+        <dt>Assertion / JWT</dt>
+        <dd>Digitally signed claim: "this user is who they say they are, with these attributes."</dd>
+      </div>
+      <div class="term">
+        <dt>Federation</dt>
+        <dd>Extending SSO trust across organizations (e.g. partner company login).</dd>
+      </div>
+      <div class="term">
+        <dt>SLO (Single Log-Out)</dt>
+        <dd>Logging out of IdP terminates sessions in ALL connected SPs simultaneously.</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- BENEFITS & RISKS -->
+  <div class="card card-br">
+    <div class="card-title"><span class="dot" style="background:var(--green)"></span>Benefits &amp; Risks</div>
+    <div class="two-col">
+      <div>
+        <div class="col-head col-green">✓ Benefits</div>
+        <ul class="pro">
+          <li>One password to manage</li>
+          <li>Fewer phishing targets</li>
+          <li>Central access control</li>
+          <li>Faster onboarding / offboarding</li>
+          <li>Audit logs in one place</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-head col-red">✗ Risks</div>
+        <ul class="con">
+          <li>Single point of failure</li>
+          <li>IdP breach = all apps compromised</li>
+          <li>Complex setup / misconfiguration</li>
+          <li>Vendor lock-in</li>
+          <li>SLO gaps leave sessions open</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- REAL-WORLD EXAMPLE -->
+  <div class="card card-example">
+    <div class="card-title"><span class="dot" style="background:var(--green)"></span>Real-World Example — "Login with Google" (OIDC)</div>
+    <div class="example-flow">
+      <div class="ex-step">
+        <div class="ex-num">1</div>
+        <div class="who">User</div>
+        <div class="action">Clicks "Sign in with Google"</div>
+        <div class="detail">on Notion's login page</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">2</div>
+        <div class="who">Notion (SP)</div>
+        <div class="action">Redirects to Google</div>
+        <div class="detail">with client_id, scope=openid email, redirect_uri</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">3</div>
+        <div class="who">Google (IdP)</div>
+        <div class="action">Authenticates user</div>
+        <div class="detail">Shows consent screen if first time; checks existing session</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">4</div>
+        <div class="who">Google → Notion</div>
+        <div class="action">Sends ID Token (JWT)</div>
+        <div class="detail">Contains: sub, email, name, exp, signed with Google's private key</div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">5</div>
+        <div class="who">Notion (SP)</div>
+        <div class="action">Verifies &amp; creates session</div>
+        <div class="detail">Validates JWT signature against Google's public key → user is in ✅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURITY TIPS -->
+  <div class="card card-sec">
+    <div class="card-title"><span class="dot" style="background:var(--red)"></span>Security Best Practices</div>
+    <ul>
+      <li><strong>Enforce MFA</strong> at the IdP — one layer protects everything</li>
+      <li><strong>Short token lifetimes</strong> + refresh tokens reduce breach windows</li>
+      <li><strong>Validate every field</strong> in assertions (issuer, audience, expiry)</li>
+      <li><strong>Use HTTPS</strong> everywhere; tokens in transit must be encrypted</li>
+      <li><strong>Implement SLO</strong> so offboarding revokes all sessions instantly</li>
+      <li><strong>Monitor IdP logs</strong> for anomalous login patterns</li>
+      <li><strong>Rotate signing keys</strong> periodically and support key rollover</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <span>🔐 SSO Quick Reference</span>
+  <span>Protocols: SAML · OIDC · OAuth 2.0 · Kerberos</span>
+  <span>IdP examples: Okta · Azure AD · Google · Auth0 · Ping</span>
+</footer>
+
+</body>
+</html>
