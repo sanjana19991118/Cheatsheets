@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 850px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
+        h1 { color: #007acc; border-bottom: 2px solid #007acc; padding-bottom: 10px; }
+        h2 { color: #007acc; margin-top: 30px; border-left: 4px solid #007acc; padding-left: 10px; }
+        .diagram {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            font-style: italic;
+            color: #555;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .code-container {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        .keyword { color: #569cd6; }
+        .type { color: #4ec9b0; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        ul { margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>TypeScript: Key Concepts in 5 Minutes</h1>
+    <p>TypeScript is a strongly typed superset of JavaScript that adds static types to the language. It compiles down to plain JavaScript, making it compatible with any browser or Node.js environment.</p>
+
+    <h2>The Compilation Process</h2>
+    <div class="diagram">
+        [Image of TypeScript compilation process showing TS source files being passed through the TypeScript Compiler (TSC) to generate plain JavaScript files]
+    </div>
+
+    <h2>Core Pillars</h2>
+    <ul>
+        <li><strong>Static Typing:</strong> Catch errors at compile-time (during development) rather than at runtime.</li>
+        <li><strong>Type Inference:</strong> TypeScript often knows the type of a variable without you explicitly writing it (e.g., <code>let x = 5</code> is inferred as a number).</li>
+        <li><strong>Interfaces/Types:</strong> Define the "shape" of objects, ensuring data structures are consistent across your app.</li>
+        <li><strong>Generics:</strong> Create reusable components that work over a variety of types rather than a single one.</li>
+    </ul>
+
+    <h2>Code Examples</h2>
+
+    <h3>1. Basic Types & Inference</h3>
+    <div class="code-container">
+        <span class="keyword">let</span> name: <span class="type">string</span> = <span class="string">"Alice"</span>; <span class="comment">// Explicit</span><br>
+        <span class="keyword">let</span> age = <span class="number">30</span>; <span class="comment">// Inferred as number</span>
+    </div>
+
+    <h3>2. Interfaces (Defining Shape)</h3>
+    <div class="code-container">
+        <span class="keyword">interface</span> <span class="type">User</span> {<br>
+        &nbsp;&nbsp;id: <span class="type">number</span>;<br>
+        &nbsp;&nbsp;username: <span class="type">string</span>;<br>
+        }<br><br>
+        <span class="keyword">const</span> user: <span class="type">User</span> = { id: <span class="number">1</span>, username: <span class="string">"bob"</span> };
+    </div>
+
+    <h3>3. Generics (Flexibility)</h3>
+    <div class="code-container">
+        <span class="keyword">function</span> identity&lt;T&gt;(arg: T): T {<br>
+        &nbsp;&nbsp;<span class="keyword">return</span> arg;<br>
+        }<br>
+        <span class="keyword">let</span> output = identity&lt;<span class="type">string</span>&gt;(<span class="string">"myString"</span>);
+    </div>
+
+    <h2>Why Use It?</h2>
+    <ul>
+        <li><strong>Better Tooling:</strong> Autocomplete, navigation, and refactoring tools work significantly better with type info.</li>
+        <li><strong>Readability:</strong> Type definitions act as documentation for your code.</li>
+        <li><strong>Safety:</strong> Significantly reduces bugs related to undefined variables or incorrect data passing.</li>
+    </ul>
+
+</body>
+</html>
