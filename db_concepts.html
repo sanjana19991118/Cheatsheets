@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #fdfdfd; }
+        h1 { color: #232f3e; border-bottom: 2px solid #ff9900; padding-bottom: 10px; }
+        h2 { color: #232f3e; margin-top: 25px; border-left: 4px solid #ff9900; padding-left: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .diagram { background: #f9f9f9; border: 1px dashed #999; padding: 20px; text-align: center; margin: 15px 0; font-family: monospace; }
+        .cap-diagram { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 20px 0; }
+        .cap-box { width: 100px; height: 100px; border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #e8f4fd; }
+        .tag { background: #ff9900; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+
+    <h1>Database Concepts: RDBMS vs. Non-RDBMS</h1>
+    <p>Understanding the fundamental difference between these storage systems is essential for architecting scalable applications (e.g., using AWS services).</p>
+
+    <h2>1. Data Modeling</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>RDBMS (Relational)</h3>
+            <p>Data stored in <strong>Tables</strong> (Rows/Columns). Strict schema.</p>
+            <div class="diagram">| ID | Name | Age |<br>|----|------|-----|<br>| 1  | Bob  | 25  |</div>
+            <p><em>Example: Amazon RDS</em></p>
+        </div>
+        <div class="card">
+            <h3>NoSQL (Non-Relational)</h3>
+            <p>Data stored as <strong>Documents, Key-Value, or Graphs</strong>. Flexible schema.</p>
+            <div class="diagram">{ "id": 1, "name": "Bob", "meta": {...} }</div>
+            <p><em>Example: Amazon DynamoDB</em></p>
+        </div>
+    </div>
+
+    <h2>2. Deep Dive: ACID (RDBMS Core)</h2>
+    [Image of ACID database transactions concept]
+    <p>ACID is the reliability standard for RDBMS transactions:</p>
+    <ul>
+        <li><strong>Atomicity:</strong> "All or nothing." If one part of a transaction fails, the whole thing is rolled back.</li>
+        <li><strong>Consistency:</strong> Transactions take the database from one valid state to another valid state (enforcing all rules/constraints).</li>
+        <li><strong>Isolation:</strong> Transactions occurring simultaneously don't interfere with each other.</li>
+        <li><strong>Durability:</strong> Once a transaction is committed, it stays committed, even if the system crashes.</li>
+    </ul>
+
+    <h2>3. Deep Dive: CAP Theorem (NoSQL Trade-off)</h2>
+    [Image of CAP theorem in distributed systems]
+    <p>Distributed systems cannot simultaneously guarantee all three, so they must pick two:</p>
+    <ul>
+        <li><strong>Consistency (C):</strong> Every read gets the most recent write.</li>
+        <li><strong>Availability (A):</strong> Every request receives a (non-error) response.</li>
+        <li><strong>Partition Tolerance (P):</strong> The system continues to operate despite network failures.</li>
+    </ul>
+    <p><em>NoSQL databases (like DynamoDB) often prioritize <strong>AP</strong> or <strong>CP</strong>, whereas RDBMS focuses on <strong>CA</strong> (within a single node) or requires complex configuration for distribution.</em></p>
+
+    <h2>4. Quick Comparison Summary</h2>
+    <table>
+        <tr><th>Feature</th><th>RDBMS (e.g., RDS)</th><th>NoSQL (e.g., DynamoDB)</th></tr>
+        <tr><td>Scaling</td><td>Vertical (Bigger Server)</td><td>Horizontal (More Servers)</td></tr>
+        <tr><td>Structure</td><td>Structured (Fixed)</td><td>Unstructured (Dynamic)</td></tr>
+        <tr><td>Best For</td><td>Complex Transactions (Banking)</td><td>Big Data, High Speed, IoT</td></tr>
+    </table>
+
+</body>
+</html>
