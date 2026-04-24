@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React Hooks — 5-min Cheatsheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --bg:#f5f2eb;
+  --bg2:#ede9e0;
+  --bg3:#e4dfd4;
+  --ink:#1a1714;
+  --ink2:#4a4540;
+  --ink3:#857e76;
+  --ink4:#b5afa7;
+  --rule:#cdc8be;
+  --red:#c0392b;
+  --orange:#d35400;
+  --amber:#e67e22;
+  --green:#27ae60;
+  --teal:#16a085;
+  --blue:#2980b9;
+  --purple:#8e44ad;
+  --pink:#e91e8c;
+  --card:#fff;
+  --card-shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
+}
+
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Lora',Georgia,serif;
+  font-size:14px;
+  line-height:1.65;
+}
+
+/* ── Dot-paper texture ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(0,0,0,0.12) 1px,transparent 1px);
+  background-size:24px 24px;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.4;
+}
+
+.wrapper{
+  position:relative;z-index:1;
+  max-width:960px;
+  margin:0 auto;
+  padding:52px 28px 88px;
+}
+
+/* ── Header ── */
+header{
+  margin-bottom:52px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:24px;
+  align-items:end;
+  padding-bottom:28px;
+  border-bottom:2px solid var(--ink);
+}
+
+.header-left{}
+
+.eyebrow{
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{
+  content:'';width:24px;height:2px;background:var(--red);
+}
+
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,5vw,52px);
+  font-weight:800;
+  color:var(--ink);
+  line-height:1.0;
+  letter-spacing:-0.02em;
+}
+h1 span{color:var(--red);}
+
+.header-desc{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:10px;
+  max-width:480px;
+}
+
+.header-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:6px;
+  font-family:'Syne',sans-serif;
+}
+.stat-num{
+  font-size:42px;
+  font-weight:800;
+  color:var(--ink);
+  line-height:1;
+}
+.stat-label{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--ink3);
+}
+
+@media(max-width:640px){
+  header{grid-template-columns:1fr;}
+  .header-right{align-items:flex-start;}
+}
+
+/* ── Section ── */
+section{margin-bottom:44px;}
+
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--rule);}
+
+/* ── Cards ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:18px 20px;
+  box-shadow:var(--card-shadow);
+}
+
+.card-title{
+  font-family:'Syne',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:6px;
+  display:flex;align-items:center;gap:7px;
+}
+
+.card-body{
+  font-size:12.5px;
+  color:var(--ink2);
+  line-height:1.6;
+}
+
+/* ── Grids ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+
+@media(max-width:720px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+}
+
+/* ── Code ── */
+pre{
+  background:#1c1917;
+  border-radius:6px;
+  padding:14px 16px;
+  font-family:'Fira Code',monospace;
+  font-size:12px;
+  line-height:1.7;
+  overflow-x:auto;
+  color:#e8e0d5;
+  margin:0;
+}
+code{
+  font-family:'Fira Code',monospace;
+  font-size:11.5px;
+  background:rgba(0,0,0,0.07);
+  padding:1px 5px;
+  border-radius:3px;
+  color:var(--red);
+}
+.kw{color:#f97583;}
+.fn{color:#b8ec85;}
+.str{color:#e5c07b;}
+.cm{color:#5c6370;font-style:italic;}
+.tag{color:#e06c75;}
+.prop{color:#61afef;}
+.num{color:#d19a66;}
+
+/* ── Hook color dots ── */
+.dot{
+  width:9px;height:9px;border-radius:50%;flex-shrink:0;
+  display:inline-block;
+}
+
+/* ── Hooks index ── */
+.hooks-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px;
+}
+.hook-chip{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:10px 12px;
+  display:flex;align-items:center;gap:9px;
+  box-shadow:var(--card-shadow);
+  transition:transform 0.15s,box-shadow 0.15s;
+}
+.hook-chip:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.hook-name{
+  font-family:'Fira Code',monospace;
+  font-size:11.5px;
+  color:var(--ink);
+  font-weight:500;
+}
+.hook-tag{
+  font-size:9px;
+  font-family:'Syne',sans-serif;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:2px 5px;
+  border-radius:3px;
+  margin-left:auto;
+  flex-shrink:0;
+}
+.tag-state{background:#fde8e8;color:#c0392b;}
+.tag-effect{background:#e8f4fd;color:#2980b9;}
+.tag-ref{background:#fdf2e8;color:#d35400;}
+.tag-perf{background:#e8fdf2;color:#27ae60;}
+.tag-ctx{background:#f4e8fd;color:#8e44ad;}
+.tag-misc{background:#f5f5f5;color:#555;}
+
+/* ── Rules of Hooks ── */
+.rules-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.rule-card{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:16px 18px;
+  box-shadow:var(--card-shadow);
+  position:relative;
+  overflow:hidden;
+}
+.rule-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:3px;
+}
+.rule-card.good::before{background:var(--green);}
+.rule-card.bad::before{background:var(--red);}
+.rule-label{
+  font-family:'Syne',sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.rule-label.good{color:var(--green);}
+.rule-label.bad{color:var(--red);}
+.rule-title{
+  font-family:'Syne',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:6px;
+}
+.rule-body{font-size:12px;color:var(--ink2);}
+
+@media(max-width:640px){.rules-wrap{grid-template-columns:1fr;}}
+
+/* ── Lifecycle diagram ── */
+.lifecycle{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:20px;
+  box-shadow:var(--card-shadow);
+}
+.lc-row{
+  display:flex;
+  align-items:center;
+  gap:0;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  padding-bottom:4px;
+}
+.lc-phase{
+  display:flex;flex-direction:column;align-items:center;
+  flex-shrink:0;
+}
+.lc-box{
+  padding:8px 14px;
+  border-radius:5px;
+  font-family:'Syne',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  text-align:center;
+  white-space:nowrap;
+  line-height:1.3;
+}
+.lc-hook{
+  font-family:'Fira Code',monospace;
+  font-size:10px;
+  color:var(--ink3);
+  margin-top:5px;
+  text-align:center;
+}
+.lc-arrow{
+  font-size:18px;
+  color:var(--ink4);
+  padding:0 6px;
+  flex-shrink:0;
+  margin-bottom:18px;
+}
+.lc-mount{background:#e8fdf2;color:#1a6640;border:1px solid #b2dfcc;}
+.lc-render{background:#fdf2e8;color:#6b3a10;border:1px solid #f0c89a;}
+.lc-update{background:#e8f4fd;color:#1a4e6b;border:1px solid #a8d4ed;}
+.lc-unmount{background:#fde8e8;color:#6b1a1a;border:1px solid #f0a8a8;}
+
+/* ── Hook detail rows ── */
+.hook-section{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--card-shadow);
+  margin-bottom:12px;
+}
+.hook-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 16px;
+  border-bottom:1px solid var(--rule);
+  background:var(--bg);
+}
+.hook-header-name{
+  font-family:'Fira Code',monospace;
+  font-size:14px;
+  font-weight:500;
+  color:var(--ink);
+}
+.hook-header-desc{
+  font-size:12px;
+  color:var(--ink3);
+  margin-left:auto;
+  font-style:italic;
+  font-family:'Lora',serif;
+}
+.hook-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+}
+.hook-body-left{
+  padding:14px 16px;
+  border-right:1px solid var(--rule);
+}
+.hook-body-right{
+  padding:14px 16px;
+}
+.mini-title{
+  font-family:'Syne',sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink4);
+  margin-bottom:8px;
+}
+.bullet-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.bullet-list li{
+  font-size:12px;
+  color:var(--ink2);
+  padding-left:14px;
+  position:relative;
+  line-height:1.5;
+}
+.bullet-list li::before{
+  content:'–';
+  position:absolute;left:0;
+  color:var(--ink4);
+}
+
+@media(max-width:640px){
+  .hook-body{grid-template-columns:1fr;}
+  .hook-body-left{border-right:none;border-bottom:1px solid var(--rule);}
+}
+
+/* ── useState flow ── */
+.state-flow{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:12px 14px;
+  background:var(--bg2);
+  border-radius:5px;
+  margin-top:10px;
+}
+.sf-box{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:5px 10px;
+  font-family:'Fira Code',monospace;
+  font-size:11px;
+  color:var(--ink);
+}
+.sf-box.highlight{
+  background:#fde8e8;
+  border-color:#f0a8a8;
+  color:var(--red);
+}
+.sf-arrow{color:var(--ink4);font-size:14px;}
+
+/* ── useEffect deps diagram ── */
+.deps-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+.dep-box{
+  background:var(--bg2);
+  border:1px dashed var(--rule);
+  border-radius:5px;
+  padding:10px 12px;
+  text-align:center;
+}
+.dep-code{
+  font-family:'Fira Code',monospace;
+  font-size:11px;
+  color:var(--ink);
+  margin-bottom:5px;
+}
+.dep-label{
+  font-size:11px;
+  color:var(--ink3);
+}
+
+@media(max-width:480px){.deps-grid{grid-template-columns:1fr;}}
+
+/* ── useContext diagram ── */
+.ctx-diagram{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:16px;background:var(--bg2);border-radius:6px;
+}
+.ctx-provider{
+  background:var(--card);
+  border:2px solid var(--purple);
+  border-radius:6px;
+  padding:8px 24px;
+  font-family:'Fira Code',monospace;
+  font-size:12px;
+  color:var(--purple);
+  font-weight:500;
+}
+.ctx-line{width:1px;height:18px;background:var(--purple);opacity:0.4;}
+.ctx-consumers{display:flex;gap:12px;}
+.ctx-consumer{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:5px;
+  padding:6px 12px;
+  font-family:'Fira Code',monospace;
+  font-size:11px;
+  color:var(--ink);
+  text-align:center;
+}
+.ctx-arrow{
+  width:1px;height:14px;
+  background:var(--ink4);
+  flex-shrink:0;
+}
+
+/* ── Comparison table ── */
+.compare-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12.5px;
+  background:var(--card);
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--card-shadow);
+}
+.compare-table th{
+  background:var(--bg3);
+  padding:9px 14px;
+  text-align:left;
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--ink2);
+  border-bottom:1px solid var(--rule);
+}
+.compare-table td{
+  padding:9px 14px;
+  border-bottom:1px solid var(--bg2);
+  vertical-align:top;
+  color:var(--ink2);
+  line-height:1.5;
+}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table td:first-child{
+  font-family:'Fira Code',monospace;
+  font-size:12px;
+  color:var(--ink);
+  font-weight:500;
+  white-space:nowrap;
+}
+.compare-table td code{background:var(--bg2);}
+
+/* ── Custom hook example ── */
+.custom-hook-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media(max-width:640px){.custom-hook-wrap{grid-template-columns:1fr;}}
+
+/* ── Golden rules ── */
+.golden-rules{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.golden-rule{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:14px 16px;
+  box-shadow:var(--card-shadow);
+  display:flex;gap:10px;align-items:flex-start;
+}
+.gr-num{
+  font-family:'Syne',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  color:var(--bg3);
+  line-height:1;
+  flex-shrink:0;
+  margin-top:-2px;
+}
+.gr-text{font-size:12.5px;color:var(--ink2);}
+.gr-text strong{color:var(--ink);font-family:'Syne',sans-serif;font-weight:700;}
+
+/* ── Warning box ── */
+.warn{
+  background:#fdf8e8;
+  border:1px solid #e8d8a0;
+  border-radius:5px;
+  padding:10px 14px;
+  font-size:12px;
+  color:#7a5f10;
+  margin-top:12px;
+}
+
+/* ── Footer ── */
+footer{
+  margin-top:64px;
+  padding-top:24px;
+  border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink3);
+}
+
+/* ── Animations ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+header,section{
+  animation:fadeUp 0.45s ease both;
+}
+header{animation-delay:0s;}
+section:nth-of-type(1){animation-delay:0.06s;}
+section:nth-of-type(2){animation-delay:0.10s;}
+section:nth-of-type(3){animation-delay:0.14s;}
+section:nth-of-type(4){animation-delay:0.18s;}
+section:nth-of-type(5){animation-delay:0.22s;}
+section:nth-of-type(6){animation-delay:0.26s;}
+section:nth-of-type(7){animation-delay:0.30s;}
+section:nth-of-type(8){animation-delay:0.34s;}
+section:nth-of-type(9){animation-delay:0.38s;}
+section:nth-of-type(10){animation-delay:0.42s;}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-left">
+    <div class="eyebrow">Quick Reference</div>
+    <h1>React <span>Hooks</span></h1>
+    <p class="header-desc">Everything you need to know about React's built-in hooks — state, effects, context, refs, performance, and custom hooks — on one page.</p>
+  </div>
+  <div class="header-right">
+    <div class="stat-num">16+</div>
+    <div class="stat-label">Built-in Hooks</div>
+  </div>
+</header>
+
+<!-- ── 1. What are Hooks? ── -->
+<section>
+  <div class="section-title">What are Hooks?</div>
+  <div class="grid-2" style="gap:14px;align-items:stretch;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div class="card-title">The big idea</div>
+      <div class="card-body">
+        Hooks are functions that let <strong>function components</strong> "hook into" React features — state, lifecycle, context, refs — without writing a class. Introduced in React 16.8, they replace class-based patterns entirely.
+      </div>
+      <div style="margin-top:12px;background:var(--bg2);border-radius:5px;padding:10px 12px;font-size:12px;color:var(--ink2);">
+        <strong>All hook names start with <code>use</code></strong> — this convention lets React (and linters) enforce the Rules of Hooks automatically.
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--orange);">
+      <div class="card-title">Why hooks over classes?</div>
+      <ul class="bullet-list" style="margin-top:4px;">
+        <li>No more confusing <code>this</code> binding</li>
+        <li>Reuse stateful logic between components (custom hooks)</li>
+        <li>Split one component into smaller functions by concern</li>
+        <li>Functions are easier to test and reason about</li>
+        <li>Smaller bundle size — no class boilerplate</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── 2. All hooks at a glance ── -->
+<section>
+  <div class="section-title">All built-in hooks at a glance</div>
+  <div class="hooks-grid">
+    <div class="hook-chip"><span class="dot" style="background:var(--red);"></span><span class="hook-name">useState</span><span class="hook-tag tag-state">State</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--red);"></span><span class="hook-name">useReducer</span><span class="hook-tag tag-state">State</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--blue);"></span><span class="hook-name">useEffect</span><span class="hook-tag tag-effect">Effect</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--blue);"></span><span class="hook-name">useLayoutEffect</span><span class="hook-tag tag-effect">Effect</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--orange);"></span><span class="hook-name">useRef</span><span class="hook-tag tag-ref">Ref</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--orange);"></span><span class="hook-name">useImperativeHandle</span><span class="hook-tag tag-ref">Ref</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--green);"></span><span class="hook-name">useMemo</span><span class="hook-tag tag-perf">Perf</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--green);"></span><span class="hook-name">useCallback</span><span class="hook-tag tag-perf">Perf</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--purple);"></span><span class="hook-name">useContext</span><span class="hook-tag tag-ctx">Context</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--ink3);"></span><span class="hook-name">useId</span><span class="hook-tag tag-misc">Misc</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--ink3);"></span><span class="hook-name">useTransition</span><span class="hook-tag tag-misc">Misc</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--ink3);"></span><span class="hook-name">useDeferredValue</span><span class="hook-tag tag-misc">Misc</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--ink3);"></span><span class="hook-name">useSyncExternalStore</span><span class="hook-tag tag-misc">Misc</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--ink3);"></span><span class="hook-name">useDebugValue</span><span class="hook-tag tag-misc">Misc</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--blue);"></span><span class="hook-name">useInsertionEffect</span><span class="hook-tag tag-effect">Effect</span></div>
+    <div class="hook-chip"><span class="dot" style="background:var(--teal);"></span><span class="hook-name">useActionState</span><span class="hook-tag" style="background:#e8fdfc;color:#0a5c54;">New</span></div>
+  </div>
+</section>
+
+<!-- ── 3. Rules of Hooks ── -->
+<section>
+  <div class="section-title">The 2 rules of hooks</div>
+  <div class="rules-wrap">
+    <div class="rule-card good">
+      <div class="rule-label good">✓ Rule 1</div>
+      <div class="rule-title">Only call at the top level</div>
+      <div class="rule-body">Never call hooks inside loops, conditions, or nested functions. React relies on hook call <strong>order</strong> being stable between renders.</div>
+      <pre style="margin-top:10px;font-size:11px;"><span class="cm">// ✓ Always at top level</span>
+<span class="kw">function</span> <span class="fn">Component</span>() {
+  <span class="kw">const</span> [x, setX] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="cm">// ← always runs, always first</span>
+}</pre>
+    </div>
+    <div class="rule-card bad">
+      <div class="rule-label bad">✕ Don't do this</div>
+      <div class="rule-title">Conditional hook calls</div>
+      <div class="rule-body">React numbers hooks by call order. If you skip one, every subsequent hook gets the wrong state bucket — bugs guaranteed.</div>
+      <pre style="margin-top:10px;font-size:11px;"><span class="cm">// ✕ Never inside a condition</span>
+<span class="kw">if</span> (condition) {
+  <span class="kw">const</span> [x, setX] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="cm">// ← breaks hook ordering!</span>
+}</pre>
+    </div>
+    <div class="rule-card good">
+      <div class="rule-label good">✓ Rule 2</div>
+      <div class="rule-title">Only call from React functions</div>
+      <div class="rule-body">Only call hooks from <strong>function components</strong> or your own <strong>custom hooks</strong>. Not from regular JS functions, classes, or event handlers.</div>
+      <pre style="margin-top:10px;font-size:11px;"><span class="cm">// ✓ Function component</span>
+<span class="kw">function</span> <span class="fn">MyComponent</span>() { <span class="fn">useEffect</span>(...) }
+<span class="cm">// ✓ Custom hook</span>
+<span class="kw">function</span> <span class="fn">useMyHook</span>() { <span class="fn">useState</span>(...) }</pre>
+    </div>
+    <div class="rule-card bad">
+      <div class="rule-label bad">✕ Not here</div>
+      <div class="rule-title">Regular functions / classes</div>
+      <div class="rule-body">Hooks only work inside React's render cycle. Outside it, React's state tracking machinery doesn't exist.</div>
+      <pre style="margin-top:10px;font-size:11px;"><span class="cm">// ✕ Plain JS function</span>
+<span class="kw">function</span> <span class="fn">helper</span>() { <span class="fn">useState</span>(...) }
+<span class="cm">// ✕ Class component</span>
+<span class="kw">class</span> <span class="fn">Foo</span> { render() { <span class="fn">useState</span>(...) }}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4. Component lifecycle ── -->
+<section>
+  <div class="section-title">Component lifecycle → hooks mapping</div>
+  <div class="lifecycle">
+    <div class="lc-row">
+      <div class="lc-phase">
+        <div class="lc-box lc-mount">Mount</div>
+        <div class="lc-hook">useState initialiser<br>useEffect(() =&gt; {}, [])</div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-phase">
+        <div class="lc-box lc-render">Render</div>
+        <div class="lc-hook">useMemo<br>useCallback<br>(every render)</div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-phase">
+        <div class="lc-box lc-update">Update</div>
+        <div class="lc-hook">setState / dispatch<br>useEffect (w/ deps)<br>useLayoutEffect</div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-phase">
+        <div class="lc-box lc-unmount">Unmount</div>
+        <div class="lc-hook">useEffect cleanup fn<br>() =&gt; { return () =&gt; … }</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 5. useState ── -->
+<section>
+  <div class="section-title">useState — local state</div>
+  <div class="hook-section">
+    <div class="hook-header">
+      <span class="dot" style="background:var(--red);"></span>
+      <span class="hook-header-name">useState(initialValue)</span>
+      <span class="hook-header-desc">most used hook — local reactive state</span>
+    </div>
+    <div class="hook-body">
+      <div class="hook-body-left">
+        <div class="mini-title">How it works</div>
+        <ul class="bullet-list">
+          <li>Returns <code>[value, setter]</code> pair</li>
+          <li>Calling setter <strong>schedules a re-render</strong></li>
+          <li>State is <strong>preserved</strong> between renders</li>
+          <li>Pass a function as initial value for lazy init</li>
+          <li>Setter can take a value or an updater function <code>prev =&gt; next</code></li>
+        </ul>
+        <div class="state-flow" style="margin-top:12px;">
+          <div class="sf-box">User event</div>
+          <div class="sf-arrow">→</div>
+          <div class="sf-box highlight">setState()</div>
+          <div class="sf-arrow">→</div>
+          <div class="sf-box">Re-render</div>
+          <div class="sf-arrow">→</div>
+          <div class="sf-box">New UI</div>
+        </div>
+      </div>
+      <div class="hook-body-right">
+        <div class="mini-title">Example</div>
+        <pre><span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="cm">// updater fn — safe for batched updates</span>
+  <span class="kw">const</span> inc = () <span class="kw">=></span>
+    <span class="fn">setCount</span>(prev <span class="kw">=></span> prev + <span class="num">1</span>);
+
+  <span class="kw">return</span> (
+    <span class="tag">&lt;button</span> onClick={inc}<span class="tag">&gt;</span>
+      Clicks: {count}
+    <span class="tag">&lt;/button&gt;</span>
+  );
+}</pre>
+      </div>
+    </div>
+  </div>
+
+<!-- ── useReducer ── -->
+  <div class="hook-section">
+    <div class="hook-header">
+      <span class="dot" style="background:var(--red);"></span>
+      <span class="hook-header-name">useReducer(reducer, initialState)</span>
+      <span class="hook-header-desc">useState for complex state logic</span>
+    </div>
+    <div class="hook-body">
+      <div class="hook-body-left">
+        <div class="mini-title">When to prefer useReducer</div>
+        <ul class="bullet-list">
+          <li>Multiple related state values that change together</li>
+          <li>Next state depends on previous in complex ways</li>
+          <li>State transitions need to be predictable / testable</li>
+          <li>Resembles Redux pattern — action + reducer</li>
+        </ul>
+      </div>
+      <div class="hook-body-right">
+        <div class="mini-title">Example</div>
+        <pre><span class="kw">function</span> <span class="fn">reducer</span>(state, action) {
+  <span class="kw">switch</span> (action.type) {
+    <span class="kw">case</span> <span class="str">'inc'</span>:
+      <span class="kw">return</span> { count: state.count + <span class="num">1</span> };
+    <span class="kw">default</span>: <span class="kw">return</span> state;
+  }
+}
+
+<span class="kw">const</span> [state, dispatch] = <span class="fn">useReducer</span>(
+  reducer, { count: <span class="num">0</span> }
+);
+<span class="fn">dispatch</span>({ type: <span class="str">'inc'</span> });</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 6. useEffect ── -->
+<section>
+  <div class="section-title">useEffect — side effects</div>
+  <div class="hook-section">
+    <div class="hook-header">
+      <span class="dot" style="background:var(--blue);"></span>
+      <span class="hook-header-name">useEffect(fn, deps?)</span>
+      <span class="hook-header-desc">runs after paint — data fetching, subscriptions, DOM mutations</span>
+    </div>
+    <div class="hook-body">
+      <div class="hook-body-left">
+        <div class="mini-title">Key behaviours</div>
+        <ul class="bullet-list">
+          <li>Runs <strong>after</strong> browser has painted</li>
+          <li>Return a cleanup function to avoid memory leaks</li>
+          <li>Deps array controls <em>when</em> it re-runs</li>
+          <li><code>useLayoutEffect</code> fires <strong>before</strong> paint — use only for DOM measurements</li>
+        </ul>
+        <div class="deps-grid">
+          <div class="dep-box">
+            <div class="dep-code">useEffect(fn)</div>
+            <div class="dep-label">Runs every render</div>
+          </div>
+          <div class="dep-box">
+            <div class="dep-code">useEffect(fn,&nbsp;[])</div>
+            <div class="dep-label">Mount only</div>
+          </div>
+          <div class="dep-box">
+            <div class="dep-code">useEffect(fn,&nbsp;[x])</div>
+            <div class="dep-label">When x changes</div>
+          </div>
+        </div>
+      </div>
+      <div class="hook-body-right">
+        <div class="mini-title">Example with cleanup</div>
+        <pre><span class="fn">useEffect</span>(() <span class="kw">=></span> {
+  <span class="kw">const</span> id = <span class="fn">setInterval</span>(() <span class="kw">=></span> {
+    <span class="fn">setTime</span>(Date.<span class="fn">now</span>());
+  }, <span class="num">1000</span>);
+
+  <span class="cm">// cleanup — runs on unmount</span>
+  <span class="cm">// or before next effect fires</span>
+  <span class="kw">return</span> () <span class="kw">=></span> <span class="fn">clearInterval</span>(id);
+}, []); <span class="cm">// ← empty = run once</span></pre>
+        <div class="warn">⚠ Every value used inside useEffect that can change must be in the deps array — the ESLint rule <code>exhaustive-deps</code> enforces this.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 7. useRef & useContext ── -->
+<section>
+  <div class="section-title">useRef &amp; useContext</div>
+  <div class="grid-2">
+    <div class="hook-section" style="margin-bottom:0;">
+      <div class="hook-header">
+        <span class="dot" style="background:var(--orange);"></span>
+        <span class="hook-header-name">useRef(initialValue)</span>
+        <span class="hook-header-desc">mutable box, no re-render</span>
+      </div>
+      <div style="padding:14px 16px;">
+        <div class="mini-title">Two uses</div>
+        <ul class="bullet-list">
+          <li><strong>DOM access:</strong> <code>ref={myRef}</code> on an element — <code>myRef.current</code> is the DOM node</li>
+          <li><strong>Mutable value:</strong> store any value that <em>shouldn't trigger a re-render</em> when changed (timers, previous values)</li>
+          <li><code>.current</code> persists across renders</li>
+          <li>Changing <code>.current</code> does <strong>not</strong> cause a re-render</li>
+        </ul>
+        <pre style="margin-top:10px;font-size:11px;"><span class="kw">const</span> inputRef = <span class="fn">useRef</span>(null);
+<span class="cm">// &lt;input ref={inputRef} /&gt;</span>
+inputRef.current.<span class="fn">focus</span>();</pre>
+      </div>
+    </div>
+    <div class="hook-section" style="margin-bottom:0;">
+      <div class="hook-header">
+        <span class="dot" style="background:var(--purple);"></span>
+        <span class="hook-header-name">useContext(Context)</span>
+        <span class="hook-header-desc">subscribe to context, no prop drilling</span>
+      </div>
+      <div style="padding:14px 16px;">
+        <div class="ctx-diagram">
+          <div class="ctx-provider">&lt;ThemeContext.Provider value={theme}&gt;</div>
+          <div class="ctx-line"></div>
+          <div class="ctx-consumers">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="ctx-arrow"></div>
+              <div class="ctx-consumer">Header<br><span style="font-size:9px;color:var(--purple);">useContext()</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="ctx-arrow"></div>
+              <div class="ctx-consumer">Footer<br><span style="font-size:9px;color:var(--purple);">useContext()</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div class="ctx-arrow"></div>
+              <div class="ctx-consumer">Sidebar<br><span style="font-size:9px;color:var(--purple);">useContext()</span></div>
+            </div>
+          </div>
+        </div>
+        <pre style="margin-top:10px;font-size:11px;"><span class="kw">const</span> ThemeCtx = <span class="fn">createContext</span>(<span class="str">'light'</span>);
+
+<span class="cm">// Any nested component:</span>
+<span class="kw">const</span> theme = <span class="fn">useContext</span>(ThemeCtx);</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 8. Performance hooks ── -->
+<section>
+  <div class="section-title">Performance hooks — useMemo &amp; useCallback</div>
+  <div class="hook-section">
+    <div class="hook-header" style="border-bottom:none;">
+      <span class="dot" style="background:var(--green);"></span>
+      <span class="hook-header-name">useMemo vs useCallback</span>
+      <span class="hook-header-desc">skip expensive recalculations between renders</span>
+    </div>
+    <div style="padding:0 16px 16px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Hook</th>
+            <th>Memoises</th>
+            <th>Use when</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>useMemo</td>
+            <td>a <strong>computed value</strong></td>
+            <td>Expensive calculations (sort, filter, transform) that only need to re-run when deps change</td>
+            <td><code>const sorted = useMemo(() =&gt; arr.sort(), [arr])</code></td>
+          </tr>
+          <tr>
+            <td>useCallback</td>
+            <td>a <strong>function reference</strong></td>
+            <td>Passing callbacks to memoised child components — prevents unnecessary re-renders of the child</td>
+            <td><code>const fn = useCallback(() =&gt; {}, [dep])</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="warn">⚠ Don't reach for these first. Profile with React DevTools before optimising — premature memoisation adds complexity with no real gain on cheap operations.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 9. Custom Hooks ── -->
+<section>
+  <div class="section-title">Custom hooks — reuse stateful logic</div>
+  <div class="custom-hook-wrap">
+    <div>
+      <div class="card-title" style="margin-bottom:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-family:'Syne',sans-serif;">The custom hook</div>
+      <pre><span class="cm">// useWindowSize.js</span>
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="kw">export function</span> <span class="fn">useWindowSize</span>() {
+  <span class="kw">const</span> [size, setSize] = <span class="fn">useState</span>({
+    w: window.innerWidth,
+    h: window.innerHeight,
+  });
+
+  <span class="fn">useEffect</span>(() <span class="kw">=></span> {
+    <span class="kw">const</span> <span class="fn">handler</span> = () <span class="kw">=></span>
+      <span class="fn">setSize</span>({ w: window.innerWidth,
+               h: window.innerHeight });
+    window.<span class="fn">addEventListener</span>(<span class="str">'resize'</span>, handler);
+    <span class="kw">return</span> () <span class="kw">=></span>
+      window.<span class="fn">removeEventListener</span>(<span class="str">'resize'</span>, handler);
+  }, []);
+
+  <span class="kw">return</span> size;
+}</pre>
+    </div>
+    <div>
+      <div class="card-title" style="margin-bottom:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-family:'Syne',sans-serif;">Using it anywhere</div>
+      <pre><span class="kw">import</span> { useWindowSize } <span class="kw">from</span> <span class="str">'./useWindowSize'</span>;
+
+<span class="kw">function</span> <span class="fn">Banner</span>() {
+  <span class="kw">const</span> { w, h } = <span class="fn">useWindowSize</span>();
+
+  <span class="kw">return</span> <span class="tag">&lt;p&gt;</span>
+    Window: {w} × {h}
+  <span class="tag">&lt;/p&gt;</span>;
+}
+
+<span class="kw">function</span> <span class="fn">Sidebar</span>() {
+  <span class="kw">const</span> { w } = <span class="fn">useWindowSize</span>();
+  <span class="cm">// completely independent state copy</span>
+  <span class="kw">return</span> w &lt; <span class="num">768</span> ? <span class="tag">&lt;Drawer/&gt;</span> : <span class="tag">&lt;Rail/&gt;</span>;
+}</pre>
+      <div class="card" style="margin-top:12px;border-left:3px solid var(--teal);">
+        <div class="card-body">
+          Custom hooks <strong>share logic, not state</strong>. Each component calling <code>useWindowSize()</code> gets its own isolated state.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 10. Golden rules ── -->
+<section>
+  <div class="section-title">6 golden rules to remember</div>
+  <div class="golden-rules">
+    <div class="golden-rule">
+      <div class="gr-num">01</div>
+      <div class="gr-text"><strong>Top-level only</strong><br>Never call hooks inside loops, conditions, or nested functions.</div>
+    </div>
+    <div class="golden-rule">
+      <div class="gr-num">02</div>
+      <div class="gr-text"><strong>Prefer state over refs</strong><br>Use <code>useRef</code> only when you genuinely don't want a re-render on change.</div>
+    </div>
+    <div class="golden-rule">
+      <div class="gr-num">03</div>
+      <div class="gr-text"><strong>Clean up effects</strong><br>Return a cleanup function from <code>useEffect</code> for subscriptions, timers, and event listeners.</div>
+    </div>
+    <div class="golden-rule">
+      <div class="gr-num">04</div>
+      <div class="gr-text"><strong>Honest deps arrays</strong><br>List every value your effect or memo reads. The <code>exhaustive-deps</code> ESLint rule is your friend.</div>
+    </div>
+    <div class="golden-rule">
+      <div class="gr-num">05</div>
+      <div class="gr-text"><strong>Extract custom hooks</strong><br>If two components share the same stateful logic, pull it into a <code>useXxx</code> custom hook.</div>
+    </div>
+    <div class="golden-rule">
+      <div class="gr-num">06</div>
+      <div class="gr-text"><strong>Profile before optimising</strong><br>Only reach for <code>useMemo</code> / <code>useCallback</code> after measuring a real performance problem.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>React Hooks — quick reference</span>
+  <span>react.dev/reference/react</span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fdfdfd;
+        }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-left: 4px solid #3498db; padding-left: 10px; }
+        .diagram-placeholder {
+            background: #f0f4f8;
+            border: 1px dashed #95a5a6;
+            padding: 20px;
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            margin: 20px 0;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+        }
+        .keyword { color: #c678dd; }
+        .func { color: #61afef; }
+        .string { color: #98c379; }
+        ul { margin-bottom: 20px; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Redux: Key Concepts in 5 Minutes</h1>
+    
+    <p>Redux is a predictable state container for JavaScript apps. It helps you manage global state in a structured, consistent way.</p>
+
+    <h2>The Core Flow</h2>
+    <p>Redux follows a strict, unidirectional data flow. This makes debugging easier and state changes predictable.</p>
+    
+    <div class="diagram-placeholder">
+        [Image of Redux data flow architecture showing Store, Action, Dispatch, and Reducer]
+    </div>
+
+    <h2>The 3 Pillars</h2>
+    <ul>
+        <li><strong>Store:</strong> The "Single Source of Truth." It holds the entire state tree of your application. You should never modify it directly.</li>
+        <li><strong>Actions:</strong> Plain JavaScript objects that describe *what* happened (e.g., <code>{ type: 'INCREMENT' }</code>). They are the only way to trigger a state change.</li>
+        <li><strong>Reducers:</strong> Pure functions that take the <em>current state</em> and an <em>action</em>, and return a <em>new state</em>. They define how the state transitions.</li>
+    </ul>
+
+    <h2>Simple Example: A Counter</h2>
+    <div class="code-block">
+        <span class="keyword">const</span> initialState = { count: 0 };<br><br>
+        <span class="keyword">function</span> <span class="func">counterReducer</span>(state = initialState, action) {<br>
+        &nbsp;&nbsp;<span class="keyword">switch</span> (action.type) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'INCREMENT'</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { count: state.count + 1 };<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">default</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> state;<br>
+        &nbsp;&nbsp;}<br>
+        }<br><br>
+        <span class="keyword">const</span> action = { type: <span class="string">'INCREMENT'</span> };
+    </div>
+
+    <h2>Key Rules to Remember</h2>
+    <ul>
+        <li><strong>State is Read-Only:</strong> You cannot change the state directly. You must dispatch an action.</li>
+        <li><strong>Changes are Pure:</strong> Reducers must be pure functions. Given the same input, they must always return the same output without side effects (no API calls inside reducers!).</li>
+        <li><strong>Unidirectional Data Flow:</strong> View -> Action -> Dispatch -> Reducer -> Store -> View.</li>
+    </ul>
+
+</body>
+</html>
