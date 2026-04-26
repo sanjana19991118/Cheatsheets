@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BITS Pilani — Complete Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0c;
+  --surface: #161616;
+  --surface2: #1e1e1e;
+  --surface3: #262626;
+  --border: #2a2a2a;
+  --border2: #383838;
+  --text: #ede9e4;
+  --text2: #8a8680;
+  --text3: #4a4745;
+  --accent: #e8c547;
+  --dpp: #5b8dee;
+  --fe: #5ec27a;
+  --dv: #e87d5b;
+  --smi: #b87de8;
+  --tip-bg: #0f1c0a;
+  --tip-text: #6ec25a;
+  --tip-border: #2a4a1e;
+  --warn-bg: #1c0f0a;
+  --warn-text: #e8845b;
+  --warn-border: #4a2a1e;
+  --info-bg: #0a0f1c;
+  --info-text: #5b8dee;
+  --info-border: #1e2a4a;
+  --formula-bg: #0a0a0a;
+  --formula-border: #2a2a2a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; font-size: 15px; }
+
+/* HEADER */
+.site-header {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem 0;
+}
+.header-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
+.site-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.site-title span { color: var(--accent); }
+.exam-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid; font-weight: 500; }
+.chip-dpp { color: var(--dpp); border-color: rgba(91,141,238,0.3); background: rgba(91,141,238,0.08); }
+.chip-fe { color: var(--fe); border-color: rgba(94,194,122,0.3); background: rgba(94,194,122,0.08); }
+.chip-dv { color: var(--dv); border-color: rgba(232,125,91,0.3); background: rgba(232,125,91,0.08); }
+.chip-smi { color: var(--smi); border-color: rgba(184,125,232,0.3); background: rgba(184,125,232,0.08); }
+
+/* SUBJECT TABS */
+.subject-tabs { display: flex; gap: 4px; border-bottom: 1px solid transparent; }
+.stab {
+  padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer;
+  border: none; background: none; color: var(--text3); font-family: 'DM Sans', sans-serif;
+  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s;
+}
+.stab:hover { color: var(--text2); }
+.stab.s-dpp { color: var(--text2); }
+.stab.s-dpp.active { color: var(--dpp); border-bottom-color: var(--dpp); }
+.stab.s-fe.active { color: var(--fe); border-bottom-color: var(--fe); }
+.stab.s-dv.active { color: var(--dv); border-bottom-color: var(--dv); }
+.stab.s-smi.active { color: var(--smi); border-bottom-color: var(--smi); }
+
+/* LAYOUT */
+.layout { display: flex; min-height: calc(100vh - 100px); }
+.sidebar {
+  width: 220px; flex-shrink: 0; position: sticky; top: 101px;
+  height: calc(100vh - 101px); overflow-y: auto;
+  border-right: 1px solid var(--border); padding: 1.25rem 0;
+  background: var(--surface);
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.sidebar-section { margin-bottom: 0.25rem; }
+.sidebar-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text3); padding: 8px 16px 4px; display: block;
+}
+.sidebar-link {
+  display: block; padding: 6px 16px; font-size: 13px; color: var(--text2);
+  cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent;
+}
+.sidebar-link:hover { color: var(--text); background: var(--surface2); }
+.sidebar-link.active-link { color: var(--text); border-left-color: var(--accent); background: var(--surface2); }
+
+/* CONTENT */
+.content { flex: 1; padding: 2rem 2.5rem; max-width: 780px; overflow-x: hidden; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* TOPIC SECTIONS */
+.topic-section { margin-bottom: 3rem; scroll-margin-top: 120px; }
+.topic-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 1.25rem; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.topic-num {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--text3); min-width: 28px;
+}
+.topic-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; color: var(--text); }
+.topic-marks {
+  margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 8px;
+  border-radius: 4px; background: rgba(232,197,71,0.1); color: var(--accent);
+}
+
+/* CONCEPT BLOCKS */
+.concept { margin-bottom: 16px; }
+.concept-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.concept-body { font-size: 13.5px; color: var(--text2); line-height: 1.75; }
+.concept-body p { margin-bottom: 8px; }
+.concept-body p:last-child { margin-bottom: 0; }
+.concept-body strong { color: var(--text); font-weight: 500; }
+
+/* CARDS (collapsible Q&A) */
+.qa-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; margin-bottom: 8px; overflow: hidden; transition: border-color 0.2s;
+}
+.qa-card:hover { border-color: var(--border2); }
+.qa-header {
+  padding: 13px 16px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+}
+.qa-q { font-size: 13.5px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.5; }
+.qa-chevron { color: var(--text3); font-size: 11px; flex-shrink: 0; margin-top: 3px; transition: transform 0.2s; }
+.qa-card.open .qa-chevron { transform: rotate(180deg); }
+.qa-body {
+  display: none; padding: 12px 16px 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13.5px; color: var(--text2); line-height: 1.75;
+}
+.qa-card.open .qa-body { display: block; }
+.qa-body p { margin-bottom: 8px; }
+.qa-body p:last-child { margin-bottom: 0; }
+.qa-body strong { color: var(--text); font-weight: 500; }
+
+/* SPECIAL BLOCKS */
+.formula {
+  background: var(--formula-bg); border: 1px solid var(--formula-border);
+  border-radius: 6px; padding: 10px 14px;
+  font-family: 'Courier New', monospace; font-size: 13px; color: #c8c0b4;
+  margin: 8px 0; overflow-x: auto; white-space: pre-wrap;
+}
+.tip {
+  background: var(--tip-bg); border-left: 3px solid var(--tip-text);
+  border-radius: 0 6px 6px 0; padding: 8px 12px;
+  font-size: 13px; color: var(--tip-text); margin: 8px 0;
+}
+.warn {
+  background: var(--warn-bg); border-left: 3px solid var(--warn-text);
+  border-radius: 0 6px 6px 0; padding: 8px 12px;
+  font-size: 13px; color: var(--warn-text); margin: 8px 0;
+}
+.info {
+  background: var(--info-bg); border-left: 3px solid var(--info-text);
+  border-radius: 0 6px 6px 0; padding: 8px 12px;
+  font-size: 13px; color: var(--info-text); margin: 8px 0;
+}
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.col-block {
+  background: var(--surface2); border-radius: 8px; padding: 12px 14px;
+}
+.col-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.col-body { font-size: 13px; color: var(--text2); line-height: 1.65; }
+.list-row {
+  padding: 7px 0; border-bottom: 1px solid var(--border);
+  font-size: 13.5px; color: var(--text2);
+}
+.list-row:last-child { border-bottom: none; }
+.list-row strong { color: var(--text); }
+.table-wrap { overflow-x: auto; margin: 10px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--surface2); color: var(--text); font-weight: 500; padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+td { padding: 7px 12px; border: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+.expand-row { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.expand-btn { font-size: 12px; color: var(--text3); cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; padding: 4px 8px; border-radius: 4px; }
+.expand-btn:hover { color: var(--text2); }
+@media(max-width:700px) {
+  .sidebar { display: none; }
+  .content { padding: 1.25rem; }
+  .two-col { grid-template-columns: 1fr; }
+  .site-header { padding: 1rem 1rem 0; }
+  .stab { padding: 8px 12px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="header-row1">
+    <div class="site-title">BITS Pilani <span>Exam Prep</span></div>
+    <div class="exam-chips">
+      <span class="chip chip-dpp">DPP — May 2, 9:30 AM</span>
+      <span class="chip chip-fe">FE — May 2, 12:30 PM</span>
+      <span class="chip chip-dv">DV — May 3, 9:30 AM</span>
+      <span class="chip chip-smi">SMI — May 3, 12:30 PM</span>
+    </div>
+  </div>
+  <div class="subject-tabs">
+    <button class="stab s-dpp active" onclick="switchSubject('dpp',this)">Data Pre-processing</button>
+    <button class="stab s-fe" onclick="switchSubject('fe',this)">Feature Engineering</button>
+    <button class="stab s-dv" onclick="switchSubject('dv',this)">Data Visualization</button>
+    <button class="stab s-smi" onclick="switchSubject('smi',this)">Statistical Modelling</button>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <!-- populated by JS -->
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ============================================================ DPP ============================================================ -->
+<div id="panel-dpp" class="panel active">
+
+  <div class="topic-section" id="dpp-s1">
+    <div class="topic-header"><span class="topic-num">01</span><span class="topic-title">Data Types and Attributes</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Types of attributes</div>
+      <div class="concept-body">
+        <div class="table-wrap"><table>
+          <tr><th>Scale</th><th>Order?</th><th>Equal gaps?</th><th>True zero?</th><th>Example</th></tr>
+          <tr><td>Nominal</td><td>No</td><td>No</td><td>No</td><td>Blood type, gender</td></tr>
+          <tr><td>Ordinal</td><td>Yes</td><td>No</td><td>No</td><td>Satisfaction: Low/Med/High</td></tr>
+          <tr><td>Interval</td><td>Yes</td><td>Yes</td><td>No</td><td>Temperature °C, IQ score</td></tr>
+          <tr><td>Ratio</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Weight, height, income</td></tr>
+        </table></div>
+        <div class="tip">Memory trigger: Can you say "twice as much"? YES = ratio. NO = interval. No order at all = nominal.</div>
+        <div class="warn">Interval zero is arbitrary — 0°C is not "no temperature." Ratio zero means complete absence.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Discrete vs Continuous attributes</div>
+      <div class="concept-body">
+        <p><strong>Discrete:</strong> Countable, finite or countably infinite values. Cannot be fractional. Example: number of children (0, 1, 2, 3...). You cannot have 2.5 children.</p>
+        <p><strong>Continuous:</strong> Can take any value in a range, including decimals. Example: height (1.732m), temperature (36.8°C), weight (72.4kg).</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Types of data sets</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Record data:</strong> Rows and columns. Each row = one object. Most common form.</div>
+        <div class="list-row"><strong>Ordered data (time-series):</strong> Sequential order matters. Stock prices, sensor readings over time.</div>
+        <div class="list-row"><strong>Graph data:</strong> Objects connected by relationships. Molecule structure (atoms + bonds), social networks.</div>
+        <div class="list-row"><strong>Document data (Bag of Words):</strong> Each document = word count vector. News articles, reviews.</div>
+        <div class="list-row"><strong>Transaction data:</strong> Each record = set of items. Supermarket baskets.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s2">
+    <div class="topic-header"><span class="topic-num">02</span><span class="topic-title">Data Quality</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Five dimensions of data quality</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Accuracy:</strong> Values are correct and reflect reality.</div>
+        <div class="list-row"><strong>Completeness:</strong> No important values are missing.</div>
+        <div class="list-row"><strong>Consistency:</strong> No contradictions within or across datasets.</div>
+        <div class="list-row"><strong>Timeliness:</strong> Data is recorded at the right frequency for the analysis being performed.</div>
+        <div class="list-row"><strong>Fitness for use:</strong> A dataset is "high quality" only relative to its intended purpose. Customer addresses = high quality for delivery, low quality for trend research.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Data quality problems</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Noise</div>
+            <div class="col-body">Wrong, impossible, or corrupted values. The measurement itself is broken. Examples: Age = 150, Mileage = −999, sq_ft = −100.<br><br>Cause: Faulty instruments, transmission errors, data entry mistakes.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">Outlier</div>
+            <div class="col-body">Real, valid value that is just extreme. The measurement is correct. Example: Elon Musk's net worth in a dataset of average salaries, Bugatti in a fuel efficiency dataset.<br><br>Sometimes outliers ARE the goal (fraud detection).</div>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:10px;">
+          <div class="col-block">
+            <div class="col-title">Missing values</div>
+            <div class="col-body">Data not collected. Causes: not applicable, forgotten, misunderstood. Risk of ignoring tuples: significant loss of information and bias if missingness is not random.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">Inconsistent data</div>
+            <div class="col-body">Contradictions within a record or across datasets. Example: Birthday = 2010, Age = 42. Main cause: merging datasets with different standards.</div>
+          </div>
+        </div>
+        <div class="warn">Handle noise FIRST. Noise inflates mean and SD → outlier detection thresholds become wrong → real outliers get missed.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Handling missing values</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Ignore the tuple:</strong> Delete the row. Risk: information loss and bias in small datasets.</div>
+        <div class="list-row"><strong>Global constant:</strong> Fill with "Unknown", "NA", or "infinity" across the whole dataset.</div>
+        <div class="list-row"><strong>Mean/median imputation:</strong> Replace with attribute average. Simple but ignores relationships.</div>
+        <div class="list-row"><strong>Most probable value:</strong> Use regression or Bayesian inference to predict the missing value. Most sophisticated.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Entity identification problem</div>
+      <div class="concept-body">
+        <p>When merging datasets, the same real-world entity may appear multiple times with slightly different names or formats. Example: "S Venkatesh", "Venkatesh S", "S. Venkatesh" all referring to the same person = duplicate data problem.</p>
+        <div class="tip">Entity identification problem → always associated with duplicate data, not noise or missing values.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s3">
+    <div class="topic-header"><span class="topic-num">03</span><span class="topic-title">Sampling Techniques</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Simple Random Sampling</div>
+      <div class="concept-body">
+        <p><strong>SRSWR (With Replacement):</strong> After selecting an object, put it back. Same object can be selected more than once.</p>
+        <p><strong>SRSWOR (Without Replacement):</strong> Once selected, removed from pool. Each object can only appear once.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Stratified vs Cluster Sampling</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Stratified sampling</div>
+            <div class="col-body">Divide into strata (groups with shared characteristics). Sample proportionally from EVERY group. Ensures all groups are represented. Reduces bias.<br><br>Example: Divide loan applicants by age (20–30, 31–40, 41–50). Sample randomly from each group.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">Cluster sampling</div>
+            <div class="col-body">Divide into clusters. RANDOMLY select a few whole clusters. Study EVERYONE in selected clusters. Used for convenience and cost efficiency.<br><br>Example: Divide city into 10 districts. Randomly pick 3. Survey every person in those 3.</div>
+          </div>
+        </div>
+        <div class="tip">Stratified = some from everywhere. Cluster = everyone from somewhere randomly chosen.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s4">
+    <div class="topic-header"><span class="topic-num">04</span><span class="topic-title">Data Preprocessing Pipeline</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Knowledge Discovery in Databases (KDD) process</div>
+      <div class="concept-body">
+        <p>Raw Data → Data Cleaning → Data Integration → Data Selection → <strong>Data Transformation</strong> → Data Mining → Pattern Evaluation → Knowledge</p>
+        <div class="info">Data Transformation's role: a crucial preprocessing step that bridges the gap between raw data and the data mining stage. Not the first step, not the last — it prepares data for mining.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Data Aggregation</div>
+      <div class="concept-body">
+        <p>Combining multiple records into summary statistics. Example: daily sales → monthly sales totals.</p>
+        <p><strong>Key benefit:</strong> Aggregated data tends to have less variability — it smooths out noise. A single sale might be unusual; monthly totals show stable trends.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Data Compression: lossy vs lossless</div>
+      <div class="concept-body">
+        <p><strong>Lossless:</strong> Original data can be perfectly reconstructed. Example: ZIP file, PNG image.</p>
+        <p><strong>Lossy:</strong> Some information is permanently lost. Example: JPEG photograph (some pixel detail discarded), Forward Selection (discarded features cannot be recovered).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s5">
+    <div class="topic-header"><span class="topic-num">05</span><span class="topic-title">Normalization Methods</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Min-Max Normalization</div>
+      <div class="concept-body">
+        <div class="formula">X' = (X − Xmin) / (Xmax − Xmin)
+To scale to [new_min, new_max]:
+X' = ((X − Xmin)/(Xmax − Xmin)) × (new_max − new_min) + new_min</div>
+        <p>Maps all values to [0, 1] by default. Minimum becomes 0, maximum becomes 1.</p>
+        <div class="warn">Avoid when data has many significant outliers. One extreme value compresses all others into a tiny range.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Z-Score Normalization</div>
+      <div class="concept-body">
+        <div class="formula">Z = (X − Mean) / SD
+SD = √(Σ(X − Mean)² / N)</div>
+        <p>Centers data at 0 with SD of 1. No fixed range output.</p>
+        <div class="tip">Preferred over Min-Max when data has outliers or different distributions. Robust because it uses SD not range.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Decimal Scaling</div>
+      <div class="concept-body">
+        <div class="formula">X' = X / 10^j
+where j = smallest integer such that max|X'| &lt; 1</div>
+        <p>Simply shifts the decimal point. Find j by looking at maximum absolute value.</p>
+        <p>Example: max value = 50 → 50/100 = 0.5 &lt; 1, so j = 2. Divide everything by 100.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Worked example — full normalization</div>
+      <div class="concept-body">
+        <p>Dataset sorted: 1, 2, 3, 4, 8, 11, 15, 24, 36, 42, 49, 50</p>
+        <div class="formula">Min-Max (Xmin=1, Xmax=50, denominator=49):
+1→0.00, 2→0.02, 3→0.04, 4→0.06, 8→0.14
+11→0.20, 15→0.29, 24→0.47, 36→0.71
+42→0.84, 49→0.98, 50→1.00
+
+Decimal Scaling (j=2, divide by 100):
+0.01, 0.02, 0.03, 0.04, 0.08, 0.11, 0.15,
+0.24, 0.36, 0.42, 0.49, 0.50</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s6">
+    <div class="topic-header"><span class="topic-num">06</span><span class="topic-title">Binning (Smoothing)</span></div>
+
+    <div class="concept">
+      <div class="concept-title">What is binning?</div>
+      <div class="concept-body">
+        <p>Binning groups sorted values into equal-sized buckets (bins) and replaces each value with a representative of its bin. Used to reduce noise by smoothing local fluctuations.</p>
+        <div class="tip">Always sort data first before binning. This is a required step — never skip it.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Mean Binning vs Boundary Binning</div>
+      <div class="concept-body">
+        <p>Dataset: {8,15,49,3,24,2,36,11,1,42,4,50} → sorted: 1,2,3,4,8,11,15,24,36,42,49,50</p>
+        <p>3 bins × 4 values: Bin1=[1,2,3,4] Bin2=[8,11,15,24] Bin3=[36,42,49,50]</p>
+        <div class="formula">Mean Binning — replace with bin mean:
+Bin1 mean=2.5  → [2.5, 2.5, 2.5, 2.5]
+Bin2 mean=14.5 → [14.5,14.5,14.5,14.5]
+Bin3 mean=44.25→ [44.25,44.25,44.25,44.25]
+
+Boundary Binning — replace with nearest boundary:
+Bin1 [min=1, max=4]: 1→1, 2→1, 3→4, 4→4
+Bin2 [min=8, max=24]: 8→8, 11→8, 15→8*, 24→24
+Bin3 [min=36, max=50]: 36→36, 42→36, 49→50, 50→50
+*15: dist to 8=7, dist to 24=9 → closer to 8</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s7">
+    <div class="topic-header"><span class="topic-num">07</span><span class="topic-title">Attribute Subset Selection</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Why reduce attributes?</div>
+      <div class="concept-body">
+        <p>Irrelevant and redundant features slow down learning, reduce model accuracy, and cause overfitting. Attribute selection finds the minimal set that still predicts well.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Heuristic search methods</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Forward Selection:</strong> Start with no features. Add one at a time — keep if it improves accuracy. Stop when no improvement. Lossy — discarded features are gone permanently.</div>
+        <div class="list-row"><strong>Backward Elimination (Stepwise Attribute Elimination):</strong> Start with all features. Remove one at a time — remove if accuracy doesn't drop. Also lossy.</div>
+        <div class="list-row"><strong>Optimal Branch and Bound:</strong> Backtracking approach. Explores subsets systematically. More thorough than greedy methods but computationally expensive.</div>
+        <div class="list-row"><strong>Decision Tree Induction:</strong> Build a tree using all features. Branches that don't appear = irrelevant features. Pruned automatically.</div>
+        <div class="tip">Lossy = information permanently lost, cannot reconstruct original. Lossless = original fully recoverable.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s8">
+    <div class="topic-header"><span class="topic-num">08</span><span class="topic-title">Similarity Measures: SMC and Jaccard</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Binary similarity problem setup</div>
+      <div class="concept-body">
+        <p>Two objects (patients, documents, transactions) described by binary features (0 = absent, 1 = present). How similar are they?</p>
+        <div class="formula">f11 = both have it (1,1)
+f00 = both lack it (0,0)  
+f10 = A has it, B doesn't (1,0)
+f01 = B has it, A doesn't (0,1)</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">SMC and Jaccard formulas</div>
+      <div class="concept-body">
+        <div class="formula">SMC = (f11 + f00) / (f11 + f00 + f10 + f01)
+Jaccard = f11 / (f11 + f10 + f01)</div>
+        <p><strong>Key difference:</strong> SMC counts "both absent" (f00) as a match. Jaccard completely ignores f00.</p>
+        <p><strong>Why Jaccard ignores f00:</strong> Absence of a feature does not prove similarity. If two patients both lack 900 out of 1000 symptoms, that tells us nothing about their shared condition.</p>
+        <div class="tip">SMC ≥ Jaccard always. Use Jaccard for medical, transactional, or any data where absence is meaningless.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Worked example</div>
+      <div class="concept-body">
+        <p>Two patients: Fever(1,1), Cough(1,0), Headache(0,0), Fatigue(1,1) → f11=2, f00=1, f10=1, f01=0</p>
+        <div class="formula">SMC = (2+1)/(2+1+1+0) = 3/4 = 0.75
+Jaccard = 2/(2+1+0) = 2/3 = 0.67</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dpp-s9">
+    <div class="topic-header"><span class="topic-num">09</span><span class="topic-title">Outlier Detection Methods</span></div>
+    <div class="concept">
+      <div class="concept-title">DBSCAN vs Local Outlier Factor (LOF)</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">DBSCAN</div>
+            <div class="col-body">Density-based clustering. Points in low-density regions or far from any cluster = outliers. Global approach — outlier is defined relative to all clusters.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">LOF (Local Outlier Factor)</div>
+            <div class="col-body">Scores each point based on how its local density compares to its neighbors' density. A point is an outlier if it is much less dense than its surroundings. Local approach — captures contextual outliers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END DPP -->
+
+<!-- ============================================================ FE ============================================================ -->
+<div id="panel-fe" class="panel">
+
+  <div class="topic-section" id="fe-s1">
+    <div class="topic-header"><span class="topic-num">01</span><span class="topic-title">Feature Engineering Fundamentals</span></div>
+
+    <div class="concept">
+      <div class="concept-title">What is feature engineering?</div>
+      <div class="concept-body">
+        <p>The process of using domain knowledge to create, transform, select, or encode raw data into features that make machine learning models learn better and faster.</p>
+        <p>Raw data is rarely model-ready. Feature engineering bridges that gap.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Four types of feature engineering</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Feature Creation:</strong> Build new features from existing ones. Example: Date of Birth → Age. Timestamp → Hour of Day. Price × Quantity → Revenue.</div>
+        <div class="list-row"><strong>Feature Transformation:</strong> Change the scale or distribution of a feature. Example: Log transformation for skewed data. Z-score normalization. Min-max scaling.</div>
+        <div class="list-row"><strong>Feature Selection:</strong> Remove irrelevant or redundant features. Keeps the model lean and prevents overfitting.</div>
+        <div class="list-row"><strong>Feature Encoding:</strong> Convert categorical data into numeric form. Example: One-hot encoding, ordinal encoding, label encoding.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Curse of dimensionality</div>
+      <div class="concept-body">
+        <p>As the number of features grows, the data becomes increasingly sparse. In high-dimensional space, distances between all points become nearly equal — distance metrics lose meaning. Models overfit, training slows.</p>
+        <div class="tip">Solution: dimensionality reduction (PCA) or feature selection to remove redundant features.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s2">
+    <div class="topic-header"><span class="topic-num">02</span><span class="topic-title">Encoding Categorical Variables</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Ordinal vs One-Hot Encoding</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Ordinal encoding</div>
+            <div class="col-body">Assigns integers 1, 2, 3... to categories. Use ONLY when genuine order exists. Example: Low=1, Medium=2, High=3.<br><br>Danger: implies mathematical relationship between categories.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">One-hot encoding</div>
+            <div class="col-body">Creates a binary column for each category. Each row gets a 1 in its category column and 0 elsewhere. No false ordering implied.<br><br>Use when categories have no natural order. Example: Loan_Purpose with 17 categories.</div>
+          </div>
+        </div>
+        <div class="warn">Never use ordinal encoding for nominal categories like Loan_Purpose, Color, City. The implied order misleads the model.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s3">
+    <div class="topic-header"><span class="topic-num">03</span><span class="topic-title">Transformations for Skewed Data</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Right-skewed data problem</div>
+      <div class="concept-body">
+        <p>Right skew = a few very large values pull the distribution to the right. Most values are clustered low, with a long tail extending right. Example: income, house prices, loan amounts.</p>
+        <p>Problem: Models sensitive to scale (linear regression, KNN, logistic regression) are confused by the extreme spread. Predictions are dominated by extreme values.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Log transformation</div>
+      <div class="concept-body">
+        <div class="formula">X' = log(X)   or   X' = log(X + 1)  [if X can be 0]</div>
+        <p>Compresses large values dramatically while leaving small values relatively unchanged. A salary of ₹500,000 becomes log(500,000) ≈ 13. A salary of ₹30,000 becomes log(30,000) ≈ 10. The gap shrinks from 470,000 to just 3.</p>
+        <p>Also reduces heteroscedasticity — the problem where variance of residuals increases with fitted values (funnel shape in residual plots).</p>
+        <div class="tip">Log transformation = squish the tail. Makes right-skewed data more symmetric and easier for models.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Scaling methods comparison</div>
+      <div class="concept-body">
+        <div class="table-wrap"><table>
+          <tr><th>Method</th><th>Formula</th><th>When to use</th><th>Weakness</th></tr>
+          <tr><td>Min-Max</td><td>(X−min)/(max−min)</td><td>Need [0,1] range</td><td>Sensitive to outliers</td></tr>
+          <tr><td>Z-Score</td><td>(X−mean)/SD</td><td>Normal-ish data</td><td>Assumes distribution</td></tr>
+          <tr><td>Robust Scaling</td><td>(X−median)/IQR</td><td>Many outliers</td><td>Less interpretable</td></tr>
+        </table></div>
+        <div class="tip">Robust scaling uses median and IQR — both ignore extreme values. Best choice when dataset has many outliers.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s4">
+    <div class="topic-header"><span class="topic-num">04</span><span class="topic-title">Feature Selection</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Why select features?</div>
+      <div class="concept-body">
+        <p>Irrelevant features add noise. Redundant features carry the same information twice. Both slow training, reduce accuracy, and increase overfitting risk.</p>
+        <p>Feature selection = find the minimum set of features that maximizes model performance.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Filter methods</div>
+      <div class="concept-body">
+        <p>Evaluate features independently of any model. Fast but ignores feature interactions.</p>
+        <div class="list-row"><strong>Correlation (Pearson):</strong> For continuous features vs continuous target. Measures linear relationship.</div>
+        <div class="list-row"><strong>Chi-square test:</strong> For categorical features vs categorical target. Tests statistical independence.</div>
+        <div class="list-row"><strong>Mutual information:</strong> Measures information shared between feature and target.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Wrapper methods</div>
+      <div class="concept-body">
+        <p>Use model performance as the selection criterion. Slower but more accurate.</p>
+        <div class="list-row"><strong>Sequential Forward Selection:</strong> Start with no features. Add one at a time based on performance gain. Lossy.</div>
+        <div class="list-row"><strong>Backward Elimination:</strong> Start with all features. Remove one at a time. Lossy.</div>
+        <div class="list-row"><strong>Ridge regression (L2):</strong> Shrinks coefficients toward zero but never exactly to zero. Does NOT eliminate features.</div>
+        <div class="list-row"><strong>Lasso regression (L1):</strong> Can shrink coefficients exactly to zero. DOES eliminate features.</div>
+        <div class="tip">Ridge = L2 = squishes but keeps all features. Lasso = L1 = can zero out features = performs selection.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s5">
+    <div class="topic-header"><span class="topic-num">05</span><span class="topic-title">Text Feature Engineering</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Bag of Words (BoW)</div>
+      <div class="concept-body">
+        <p>Represents each document as a vector of word counts. Vocabulary = all unique words across all documents. Each document gets a count per word.</p>
+        <p>Limitation: Ignores word order ("not good" = same tokens as "good not"). Cannot capture meaning. Creates sparse, high-dimensional vectors.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">TF-IDF</div>
+      <div class="concept-body">
+        <div class="formula">TF-IDF(word, doc) = TF(word, doc) × IDF(word)
+TF = count of word in doc / total words in doc
+IDF = log(total docs / docs containing word)</div>
+        <p>TF rewards words that appear frequently in a specific document. IDF penalizes words that appear in almost every document (like "the", "is"). Result: rare, informative words get high scores.</p>
+        <div class="tip">TF-IDF is always better than raw BoW for text classification. Use it by default.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Word Embeddings</div>
+      <div class="concept-body">
+        <p>Represent each word as a dense vector of real numbers (e.g. 300 dimensions) that captures semantic meaning.</p>
+        <p><strong>Word2Vec:</strong> Learns embeddings by predicting context words from target (or vice versa). Uses local context windows.</p>
+        <p><strong>GloVe:</strong> Uses global word co-occurrence statistics from the entire corpus. Better at capturing global meaning relationships.</p>
+        <div class="tip">GloVe vs Word2Vec: GloVe = global co-occurrence. Word2Vec = local context windows.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">NLP concepts</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>POS tagging:</strong> Assigns grammatical roles to words — Noun, Verb, Adjective, etc.</div>
+        <div class="list-row"><strong>Unigrams:</strong> Single tokens (one word at a time).</div>
+        <div class="list-row"><strong>Bigrams:</strong> Pairs of consecutive words. Fixes "not good" misclassification problem.</div>
+        <div class="list-row"><strong>Bag of Words limitation:</strong> Cannot capture semantics or word order. Produces sparse vectors.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s6">
+    <div class="topic-header"><span class="topic-num">06</span><span class="topic-title">Time-Series and Sensor Features</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Time-derived features from timestamps</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Hour of day:</strong> Captures daily cycles (temperature peaks at noon, dips at night).</div>
+        <div class="list-row"><strong>Day of week:</strong> Weekday vs weekend patterns (occupancy, heating load).</div>
+        <div class="list-row"><strong>Month / season:</strong> Seasonal temperature patterns.</div>
+        <div class="list-row"><strong>Lag features:</strong> Previous timestamp's value. Most powerful predictor for sensor data — temperature at T−1 predicts temperature at T.</div>
+        <div class="list-row"><strong>Rolling statistics:</strong> Mean or SD over last N timestamps. Captures trends and volatility.</div>
+        <div class="tip">For time-series prediction: lag features + rolling averages + hour of day = the winning combination in most cases.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Interaction features</div>
+      <div class="concept-body">
+        <p>Create new features by combining two existing ones. Captures relationships that neither feature alone can express.</p>
+        <p>Example: Motion_Flag × Temperature. When Motion=1 (people present), body heat affects room temperature. This interaction tells the model something neither feature alone can.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s7">
+    <div class="topic-header"><span class="topic-num">07</span><span class="topic-title">Audio Feature Engineering</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Features extracted from audio</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>MFCC (Mel-Frequency Cepstral Coefficients):</strong> Captures how frequency content changes over time. Mimics human auditory perception. Most important feature for speech recognition.</div>
+        <div class="list-row"><strong>Spectrogram:</strong> 2D representation of frequency vs time. Shows which frequencies are present when. Can be fed to CNNs as an image.</div>
+        <div class="list-row"><strong>Zero Crossing Rate:</strong> How often the waveform crosses zero amplitude. High for noisy/percussive sounds, low for smooth tones.</div>
+        <div class="list-row"><strong>RMS Energy:</strong> Root mean square of amplitude over a window. Captures loudness patterns.</div>
+        <div class="list-row"><strong>Chroma features:</strong> Represent the 12 pitch classes in music. Useful for chord and key detection.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Raw waveform training — when possible?</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Yes — deep learning</div>
+            <div class="col-body">CNNs, RNNs, Transformers can learn features automatically from raw waveforms. Examples: WaveNet, wav2vec, Whisper. Requires large datasets.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">No — traditional ML</div>
+            <div class="col-body">SVM, Random Forest, KNN need fixed-length numeric feature vectors. Cannot process raw sequences. Always need hand-crafted features (MFCCs etc.) first.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="fe-s8">
+    <div class="topic-header"><span class="topic-num">08</span><span class="topic-title">Automated Feature Engineering</span></div>
+    <div class="concept">
+      <div class="concept-title">Tools and methods</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Featuretools / Deep Feature Synthesis (DFS):</strong> Recursively aggregates and transforms features across related entities (relational data). Automatically creates complex features.</div>
+        <div class="list-row"><strong>TSFresh:</strong> Extracts hundreds of time-series features automatically. Uses hypothesis testing to filter out irrelevant ones.</div>
+        <div class="list-row"><strong>FeatureWiz:</strong> Selects and ranks important features using model-based importance and correlation filtering.</div>
+        <div class="list-row"><strong>Permutation Feature Importance:</strong> Model-agnostic. Shuffles one feature at a time and measures performance drop. Features that hurt performance most when shuffled = most important.</div>
+        <div class="warn">Tree-based feature importance (mean decrease in impurity) can be biased — inflates importance of high-cardinality features.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END FE -->
+
+<!-- ============================================================ DV ============================================================ -->
+<div id="panel-dv" class="panel">
+
+  <div class="topic-section" id="dv-s1">
+    <div class="topic-header"><span class="topic-num">01</span><span class="topic-title">7 Stages of Data Visualization</span></div>
+    <div class="concept">
+      <div class="concept-title">The complete pipeline</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>1. Acquire:</strong> Collect data from sources (databases, APIs, files, sensors).</div>
+        <div class="list-row"><strong>2. Parse:</strong> Structure and clean. Handle missing values, fix formats, standardize types.</div>
+        <div class="list-row"><strong>3. Filter:</strong> Keep only relevant data. Remove noise and irrelevant records for this analysis.</div>
+        <div class="list-row"><strong>4. Mine:</strong> Analyze. Find patterns, correlations, trends, anomalies. This is where the story lives.</div>
+        <div class="list-row"><strong>5. Represent:</strong> Choose the right chart type. The visual form should match the data's nature and message.</div>
+        <div class="list-row"><strong>6. Refine:</strong> Polish. Remove clutter, add context, improve labels, choose colors intentionally. Design with purpose.</div>
+        <div class="list-row"><strong>7. Interact:</strong> Add interactivity for exploration — filters, tooltips, drill-down, zoom — where the audience needs to explore.</div>
+        <div class="tip">Each stage reduces chaos and increases signal. By stage 7, you have a purposeful communication tool.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s2">
+    <div class="topic-header"><span class="topic-num">02</span><span class="topic-title">Storytelling with Data Principles</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Core principles</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Step 1 — Understand the context:</strong> Who is the audience? What do they know? What action should they take? What is the one message?</div>
+        <div class="list-row"><strong>Think like a designer:</strong> Every element either helps the audience or it should be removed. Intentional design over decoration.</div>
+        <div class="list-row"><strong>Edward Tufte — Maximize data-ink ratio:</strong> Every drop of ink should represent data. Remove borders, background shading, 3D effects, redundant labels.</div>
+        <div class="list-row"><strong>Eliminate clutter:</strong> Remove chart borders, heavy gridlines, unnecessary legends. Each removal reduces cognitive load.</div>
+        <div class="list-row"><strong>Bing Bang Bongo:</strong> Say what you'll say → Say it → Say what you said. Structure every presentation this way.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Visual attributes (pre-attentive)</div>
+      <div class="concept-body">
+        <p>Pre-attentive attributes are processed by the brain instantly, before conscious thought. Use them to direct attention.</p>
+        <div class="list-row"><strong>Position:</strong> Most accurate encoding. Where a point sits on an axis.</div>
+        <div class="list-row"><strong>Color (hue):</strong> Differentiates categories. Use sparingly — max 5–6 colors.</div>
+        <div class="list-row"><strong>Color (saturation/intensity):</strong> Encodes magnitude. Darker = more.</div>
+        <div class="list-row"><strong>Size:</strong> Encodes quantity. Used for bubble chart third variable.</div>
+        <div class="list-row"><strong>Shape:</strong> Differentiates categories without color (colorblind-safe).</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Narrative frameworks</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Author-driven narrative</div>
+            <div class="col-body">Presenter controls the story. Linear path, no interactivity, heavy messaging. Audience follows. Best for persuasion and formal presentations.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">Reader-driven narrative</div>
+            <div class="col-body">User explores freely. No fixed path, full interactivity. Best for exploratory dashboards where users have different questions.</div>
+          </div>
+        </div>
+        <p style="margin-top:10px;"><strong>Martini Glass:</strong> Starts author-driven (narrow neck) — structured story. Then opens to reader-driven exploration (wide bowl). Best of both worlds.</p>
+        <p><strong>For resistant audiences:</strong> Extend the narrative. More background, slower build-up, leave the final decision open to the audience. Never start with a shock.</p>
+        <div class="tip">Zooming Out story type = starts broad, zooms into specific detail. Or starts specific, zooms out to show bigger picture.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s3">
+    <div class="topic-header"><span class="topic-num">03</span><span class="topic-title">Chart Types and When to Use Them</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Chart selection guide</div>
+      <div class="concept-body">
+        <div class="table-wrap"><table>
+          <tr><th>Chart type</th><th>Purpose</th><th>When to use</th></tr>
+          <tr><td>Bar chart</td><td>Comparison</td><td>Comparing values across categories</td></tr>
+          <tr><td>Line chart</td><td>Trend over time</td><td>Time-series, sentiment over months</td></tr>
+          <tr><td>Pie chart</td><td>Composition</td><td>Parts of a whole. Max 5–6 slices. Must sum to 100%.</td></tr>
+          <tr><td>Scatter plot</td><td>Relationship</td><td>Correlation between two continuous variables</td></tr>
+          <tr><td>Bubble chart</td><td>3 variables</td><td>X position, Y position, and bubble size</td></tr>
+          <tr><td>Box plot</td><td>Distribution</td><td>Median, quartiles, outliers. Whiskers = 1.5×IQR</td></tr>
+          <tr><td>Histogram</td><td>Distribution</td><td>Frequency of continuous data. Bars touch (no gaps).</td></tr>
+          <tr><td>Treemap</td><td>Hierarchy</td><td>Hierarchical data with drill-down</td></tr>
+          <tr><td>Heatmap</td><td>Correlation/density</td><td>Correlation matrices, two-dimensional density</td></tr>
+        </table></div>
+        <div class="warn">Spaghetti graph = too many overlapping lines. Fix: grey out others, highlight the one that matters.</div>
+        <div class="warn">Truncated y-axis on bar chart = exaggerates small differences, distorts true impact. Always start bar charts at 0.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s4">
+    <div class="topic-header"><span class="topic-num">04</span><span class="topic-title">Dashboard Design</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Types of dashboards</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Performance/Operational dashboards:</strong> Real-time KPIs. Used by operational staff. Monitors what is happening now.</div>
+        <div class="list-row"><strong>Strategic dashboards:</strong> High-level summaries for executives. Long-term decision making. Quarterly or annual view.</div>
+        <div class="list-row"><strong>Analytical dashboards:</strong> Deep exploration tools for analysts. Interactive, drill-down capability.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Dashboard design principles</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Most common error:</strong> Choosing a chart type that doesn't match the data — e.g. bars for time trends instead of a line chart.</div>
+        <div class="list-row"><strong>Presentation Zen methodology:</strong> Restraint, Simplicity, Naturalness. Less is more. Let the data breathe.</div>
+        <div class="list-row"><strong>Space Shuttle Columbia lesson:</strong> Cluttered slides with multiple font sizes and excessive text caused NASA managers to misread damage severity. Clarity saves lives.</div>
+        <div class="list-row"><strong>Guide attention intentionally:</strong> Effective visuals don't show everything equally — they direct the audience's eye to what matters.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s5">
+    <div class="topic-header"><span class="topic-num">05</span><span class="topic-title">Tableau</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Dimensions vs Measures</div>
+      <div class="concept-body">
+        <p><strong>Dimensions:</strong> Categorical fields. Used to slice, group, and label. Examples: Region, Product Name, Date, Customer ID. Describe the "what."</p>
+        <p><strong>Measures:</strong> Numeric fields that can be aggregated. Examples: Sales, Profit, Quantity, Revenue. Represent the "how much."</p>
+        <p><strong>Calculated field:</strong> A new field you create with a formula using existing fields. Example: Profit Margin = SUM(Profit)/SUM(Sales). Creates custom metrics without touching the source data.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Tableau architecture concepts</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Live connection:</strong> Queries source database in real-time. Always current but slower.</div>
+        <div class="list-row"><strong>Extract:</strong> Snapshot of data stored locally. Faster performance but requires scheduled refresh.</div>
+        <div class="list-row"><strong>Incremental extract:</strong> Only adds new records since last extract. Most efficient for large datasets.</div>
+        <div class="list-row"><strong>Row-level security:</strong> Controls which rows each user can see. Implemented via user filters on extracts.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s6">
+    <div class="topic-header"><span class="topic-num">06</span><span class="topic-title">Power BI and Looker Studio</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Power BI filters</div>
+      <div class="concept-body">
+        <p>Filters control which data is shown in visuals. They allow users to focus on relevant subsets without changing the underlying data.</p>
+        <div class="list-row"><strong>Visual-level filters:</strong> Apply to a single chart only.</div>
+        <div class="list-row"><strong>Page-level filters:</strong> Apply to all visuals on one page.</div>
+        <div class="list-row"><strong>Report-level filters:</strong> Apply across all pages in the report.</div>
+        <div class="list-row"><strong>Slicers:</strong> Visual filter controls the user can interact with directly on the dashboard.</div>
+        <div class="tip">Filters = one dashboard, many personalized views. The same report serves everyone without duplication.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Google Data Studio / Looker Studio</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Calculated field:</strong> Creates new metrics or dimensions from existing data (same concept as Tableau).</div>
+        <div class="list-row"><strong>Best practice for complex dashboards:</strong> Multiple pages with clear navigation and logical flow.</div>
+        <div class="list-row"><strong>Sharing:</strong> Multiple options — view/edit permissions, public/private links.</div>
+        <div class="list-row"><strong>Filtering:</strong> Built-in filter controls and date range selectors.</div>
+        <div class="list-row"><strong>Chart types:</strong> Wide range including tables, geo maps, scorecards, line, bar, pie.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s7">
+    <div class="topic-header"><span class="topic-num">07</span><span class="topic-title">Python Visualization</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Matplotlib vs Seaborn</div>
+      <div class="concept-body">
+        <div class="two-col">
+          <div class="col-block">
+            <div class="col-title">Matplotlib</div>
+            <div class="col-body">Foundation library. Low-level, full manual control. More code for basic charts. Free and open-source. Can make virtually any chart.</div>
+          </div>
+          <div class="col-block">
+            <div class="col-title">Seaborn</div>
+            <div class="col-body">Built on Matplotlib. Higher-level API. Beautiful statistical charts with less code. Matplotlib is its rendering engine.</div>
+          </div>
+        </div>
+        <p style="margin-top:10px;"><strong>Figure-level (relplot, catplot):</strong> Manages its own FacetGrid of subplots. Returns a FacetGrid object.</p>
+        <p><strong>Axes-level (scatterplot, boxplot, swarmplot):</strong> Draws onto a specific matplotlib Axes object. More composable.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Key functions reference</div>
+      <div class="concept-body">
+        <div class="formula">SEABORN:
+sns.swarmplot()     → categorical scatter, no overlap
+sns.pairplot()      → bird's-eye view of all variables
+sns.boxplot()       → whiskers = 1.5 × IQR from Q1/Q3
+sns.heatmap()       → correlation matrix visualization
+lmplot(order=2)     → quadratic/non-linear trend line
+
+MATPLOTLIB:
+plt.legend()        → adds legend
+plt.tight_layout()  → fixes subplot spacing
+plt.plot(linestyle=...) → controls line style
+fig, axes = plt.subplots(nrows, ncols) → subplots
+
+PANDAS:
+pd.read_csv()       → read CSV file
+pd.read_sql()       → read from SQL database
+
+GEOPANDAS:
+gpd.points_from_xy(df['Longitude'], df['Latitude'])
+                    → converts lat/lon columns to geometry
+geometry column     → holds shapes: points, lines, polygons</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="dv-s8">
+    <div class="topic-header"><span class="topic-num">08</span><span class="topic-title">Bokeh</span></div>
+    <div class="concept">
+      <div class="concept-title">Bokeh key concepts</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Why Bokeh:</strong> Comprehensive interactive web visualization framework. Best choice for web-based interactive dashboards.</div>
+        <div class="list-row"><strong>Interactions:</strong> Layered interaction model with callbacks. User actions trigger Python/JS callbacks that update the visualization.</div>
+        <div class="list-row"><strong>Multiple linked views:</strong> Coordinated views with shared data models. Selecting in one chart highlights across all charts.</div>
+        <div class="list-row"><strong>Real-time data:</strong> Efficient streaming with proper protocols. Structured streaming with optimized updates.</div>
+        <div class="list-row"><strong>Architecture:</strong> Modular design with clear separation of concerns. Components are reusable and maintainable.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END DV -->
+
+<!-- ============================================================ SMI ============================================================ -->
+<div id="panel-smi" class="panel">
+
+  <div class="topic-section" id="smi-s1">
+    <div class="topic-header"><span class="topic-num">01</span><span class="topic-title">Linear Regression</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Simple and Multiple Linear Regression</div>
+      <div class="concept-body">
+        <div class="formula">Simple:   Ŷ = β₀ + β₁X
+Multiple: Ŷ = β₀ + β₁X₁ + β₂X₂ + ... + βₖXₖ + ε
+
+Least squares estimator: B = (XᵀX)⁻¹ XᵀY</div>
+        <p><strong>β₀ (intercept):</strong> Expected value of Y when all X = 0.</p>
+        <p><strong>β₁ (slope, simple regression):</strong> Expected change in Y for a one-unit increase in X.</p>
+        <p><strong>β₁ (partial slope, multiple regression):</strong> Expected change in Y for a one-unit increase in X₁, holding all other variables constant. The "holding constant" phrase is critical.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">LINE assumptions</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>L — Linearity:</strong> Relationship between X and Y is linear.</div>
+        <div class="list-row"><strong>I — Independence:</strong> Errors are not correlated with each other.</div>
+        <div class="list-row"><strong>N — Normality:</strong> Residuals follow a normal distribution.</div>
+        <div class="list-row"><strong>E — Equal variance (homoscedasticity):</strong> Spread of errors is constant across all fitted values.</div>
+        <div class="warn">Funnel shape in residual vs fitted plot = E violated (heteroscedasticity). Fix: log transformation of Y.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">R², Adjusted R², and VIF</div>
+      <div class="concept-body">
+        <p><strong>R²:</strong> Proportion of variance in Y explained by the model. R²=0.9 → model explains 90% of variation. R² always increases when you add more predictors — even useless ones.</p>
+        <p><strong>Adjusted R²:</strong> Penalizes for adding unnecessary predictors. Only increases if new predictor genuinely improves the model. Use this when comparing models with different numbers of features.</p>
+        <p><strong>VIF (Variance Inflation Factor):</strong> Detects multicollinearity. VIF > 10 = highly collinear, consider removing. Symptom of severe multicollinearity: significant overall F-test but insignificant individual t-tests.</p>
+        <div class="tip">Large gap between R² and Adjusted R² = model has predictors with little explanatory power. Trim them.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s2">
+    <div class="topic-header"><span class="topic-num">02</span><span class="topic-title">Logistic Regression</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Why not linear regression for binary outcomes?</div>
+      <div class="concept-body">
+        <p>Linear Probability Model (LPM) applies OLS to a binary dependent variable. Major flaw: it can predict probabilities outside [0,1] — a probability of 1.3 or −0.2 is meaningless.</p>
+        <p>Logit and Probit models use a non-linear S-shaped function to constrain probabilities between 0 and 1. Both typically yield very similar practical results.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Log-odds, odds, and odds ratios</div>
+      <div class="concept-body">
+        <div class="formula">Odds = P(event) / P(no event)
+If P = 0.75 → Odds = 0.75/0.25 = 3
+
+Log-odds = ln(Odds)
+Logistic coefficient = change in log-odds per unit increase in X
+
+Odds ratio = e^coefficient</div>
+        <p><strong>Odds ratio of 2.5:</strong> One-unit increase in X multiplies the odds of the event by 2.5.</p>
+        <p><strong>Odds ratio of 0.90:</strong> One-unit increase in X → 10% decrease in the odds.</p>
+        <p><strong>Coefficient of −0.2 for Income:</strong> Higher income decreases the log-odds (and thus odds) of default.</p>
+        <div class="tip">To get odds ratio from logit coefficient: exponentiate it. e^coefficient = odds ratio.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s3">
+    <div class="topic-header"><span class="topic-num">03</span><span class="topic-title">Hypothesis Testing</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Core logic of hypothesis testing</div>
+      <div class="concept-body">
+        <p><strong>H₀ (null hypothesis):</strong> The default assumption. No effect, no difference, no relationship.</p>
+        <p><strong>H₁ (alternative hypothesis):</strong> What you are trying to prove.</p>
+        <p><strong>p-value:</strong> Probability of seeing this result (or more extreme) if H₀ were true. Small p = surprising result = evidence against H₀.</p>
+        <p><strong>α (significance level):</strong> Your threshold. Usually 0.05. If p &lt; α → reject H₀. If p > α → fail to reject H₀.</p>
+        <div class="warn">Never say "accept H₀." Always say "fail to reject H₀." And never say "prove" — statistics gives evidence, not proof.</div>
+        <div class="tip">p-value = 0.08 at α = 0.05 → fail to reject H₀. 0.08 > 0.05.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Choosing the right test</div>
+      <div class="concept-body">
+        <div class="table-wrap"><table>
+          <tr><th>Situation</th><th>Test</th></tr>
+          <tr><td>3+ groups, compare means</td><td>One-way ANOVA</td></tr>
+          <tr><td>Same subjects, two conditions</td><td>Paired t-test</td></tr>
+          <tr><td>Two independent groups, compare means</td><td>Independent two-sample t-test</td></tr>
+          <tr><td>Two groups, compare variance/consistency</td><td>F-test for variances</td></tr>
+          <tr><td>After significant ANOVA — which groups?</td><td>Pairwise t-tests</td></tr>
+          <tr><td>Two categorical variables — association?</td><td>Chi-square test</td></tr>
+          <tr><td>Pass/fail, fixed probability</td><td>Binomial distribution</td></tr>
+          <tr><td>Count of events in fixed time/space</td><td>Poisson distribution</td></tr>
+        </table></div>
+        <div class="warn">Stratification is NOT one of the 3 experimental design principles. The 3 are: Randomization, Replication, Control.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Chebyshev's inequality</div>
+      <div class="concept-body">
+        <div class="formula">P(|X − μ| ≤ k·σ) ≥ 1 − 1/k²</div>
+        <p>Works for ANY distribution — no normality assumption needed.</p>
+        <p>Example: Mean=500g, SD=20g, interval 460–540g. Range = ±40 = ±2σ. So k=2.</p>
+        <div class="formula">1 − 1/k² = 1 − 1/4 = 0.75 = at least 75%</div>
+        <div class="tip">Chebyshev gives a lower bound — "at least X%." Normal distribution gives exact percentages. Chebyshev is more general.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Central Limit Theorem</div>
+      <div class="concept-body">
+        <p>Take many independent random samples of size n from any population. The distribution of sample means will be approximately normal with:</p>
+        <div class="formula">Mean of sample means = population mean (μ)
+SD of sample means = σ/√n  (standard error)</div>
+        <p>This holds regardless of the original population's shape — as long as n is large enough (typically n ≥ 30).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s4">
+    <div class="topic-header"><span class="topic-num">04</span><span class="topic-title">ANOVA</span></div>
+
+    <div class="concept">
+      <div class="concept-title">One-way ANOVA</div>
+      <div class="concept-body">
+        <p>Tests whether means of 3+ groups differ. H₀: all group means are equal. H₁: at least one mean is different.</p>
+        <p>F-statistic = variance between groups / variance within groups. Large F = groups are more different than random variation would suggest.</p>
+        <div class="tip">ANOVA tells you something is different. Pairwise t-tests (post-hoc) tell you which specific pairs differ.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Two-way ANOVA</div>
+      <div class="concept-body">
+        <p>Tests effect of two factors simultaneously plus their interaction.</p>
+        <div class="formula">Source    | SS  | df      | MS       | F
+----------|-----|---------|----------|----------
+Factor A  | SSA | a−1     | SSA/dfA  | MSA/MSE
+Factor B  | SSB | b−1     | SSB/dfB  | MSB/MSE
+A×B inter.| SSAB| (a−1)(b−1)| SSAB/df | MSAB/MSE
+Error     | SSE | N−ab    | SSE/dfE  |
+Total     | SST | N−1     |          |</div>
+        <p><strong>Interaction effect:</strong> The effect of Factor A depends on the level of Factor B. Example: Glass packaging is better at low temperature but worse at high temperature vs plastic. You cannot interpret main effects alone if interaction is significant.</p>
+        <div class="warn">Significant interaction = interpreting main effects alone is misleading. Always check interaction first.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s5">
+    <div class="topic-header"><span class="topic-num">05</span><span class="topic-title">Chi-Square Test</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Chi-square test of independence</div>
+      <div class="concept-body">
+        <p>Tests whether two categorical variables are associated or independent.</p>
+        <div class="formula">H₀: Variable A and Variable B are independent
+H₁: There is an association between A and B
+
+Expected frequency: Eᵢⱼ = (Row totalᵢ × Column totalⱼ) / Grand total
+
+χ² = Σ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ
+
+df = (rows − 1) × (columns − 1)
+
+If χ² > χ²_critical → Reject H₀ → Association exists</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Cramér's V — strength of association</div>
+      <div class="concept-body">
+        <div class="formula">V = √(χ² / (n × min(r−1, c−1)))</div>
+        <div class="table-wrap"><table>
+          <tr><th>V value</th><th>Strength</th></tr>
+          <tr><td>V &lt; 0.1</td><td>Negligible</td></tr>
+          <tr><td>0.1 ≤ V &lt; 0.3</td><td>Small</td></tr>
+          <tr><td>0.3 ≤ V &lt; 0.5</td><td>Medium</td></tr>
+          <tr><td>V ≥ 0.5</td><td>Large</td></tr>
+        </table></div>
+        <div class="tip">Chi-square = is there an association? Cramér's V = how strong is it?</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Proportion test (z-test)</div>
+      <div class="concept-body">
+        <div class="formula">H₀: p ≤ p₀  vs  H₁: p > p₀  (one-tailed right)
+
+z = (p̂ − p₀) / √(p₀(1−p₀)/n)
+
+p̂ = observed proportion
+Critical value (one-tailed, α=0.05) = 1.645
+Critical value (two-tailed, α=0.05) = ±1.960</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s6">
+    <div class="topic-header"><span class="topic-num">06</span><span class="topic-title">PCA and Factor Analysis</span></div>
+
+    <div class="concept">
+      <div class="concept-title">PCA — Principal Component Analysis</div>
+      <div class="concept-body">
+        <p>Finds new uncorrelated axes (principal components) that capture maximum variance. Projects data from high dimensions to fewer dimensions.</p>
+        <p><strong>Key properties:</strong> Components are orthogonal (completely uncorrelated). PC1 captures most variance, PC2 next most, and so on.</p>
+        <p><strong>Kaiser criterion:</strong> Retain components with eigenvalue > 1. A component below 1 explains less than a single original variable.</p>
+        <p><strong>Why standardize before PCA:</strong> PCA is scale-sensitive. Large-scale variables dominate. Standardize so all variables contribute equally.</p>
+        <p><strong>PCA vs Factor Analysis:</strong> PCA explains total variance (including noise). Factor Analysis explains common variance (shared across variables) and uncovers latent factors.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Factor Analysis</div>
+      <div class="concept-body">
+        <p>Discovers hidden (latent) factors that explain correlations among observed variables.</p>
+        <p>Example: Three survey questions "Are you happy?", "Are you satisfied?", "Was your service joyful?" all correlate because they share a latent factor: customer satisfaction.</p>
+        <p><strong>Factor loadings:</strong> Correlation between an observed variable and a latent factor. High loading = this variable strongly reflects this factor.</p>
+        <p><strong>Condition for factor analysis:</strong> Sufficient sample size (5–10 observations per variable), variables should be continuous, sufficient correlations among variables.</p>
+        <div class="warn">Factor analysis does NOT require a dependent variable to be established first. That is NOT one of its conditions.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s7">
+    <div class="topic-header"><span class="topic-num">07</span><span class="topic-title">Cluster Analysis</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Clustering fundamentals</div>
+      <div class="concept-body">
+        <p>Unsupervised learning. No labels. Goal: group similar objects together.</p>
+        <p><strong>Good clustering:</strong> High intra-cluster similarity (similar within groups) and low inter-cluster similarity (different between groups).</p>
+        <p><strong>Why standardize before clustering:</strong> Distance measures are sensitive to scale. A variable in thousands will dominate distances over a variable in units.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">K-Means algorithm</div>
+      <div class="concept-body">
+        <p>1. Choose K. Place K random centroids. 2. Assign each point to nearest centroid. 3. Update each centroid to mean of its assigned points. 4. Repeat until stable.</p>
+        <p><strong>Weakness:</strong> Sensitive to initial random centroid placement. Different runs can give different results.</p>
+        <p><strong>Choose K using:</strong> Elbow method (find kink in inertia curve) or Silhouette score (maximize average score).</p>
+        <div class="tip">K-Means advantage: Fast, scales to large data (10,000+ points). Use K-Means for big datasets.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Hierarchical clustering</div>
+      <div class="concept-body">
+        <p><strong>Agglomerative (bottom-up):</strong> Each point starts as its own cluster. Merge the two closest clusters. Repeat until one cluster remains. Output = dendrogram.</p>
+        <p><strong>No need to specify K in advance</strong> — cut the dendrogram at any height to get desired number of clusters.</p>
+        <p><strong>Find optimal K:</strong> Look for the largest gap between successive merge distances in the dendrogram.</p>
+        <p><strong>Linkage methods:</strong></p>
+        <div class="list-row"><strong>Single linkage:</strong> Distance = closest points between clusters. Can create chain-like clusters.</div>
+        <div class="list-row"><strong>Complete linkage:</strong> Distance = farthest points between clusters. Creates compact, spherical clusters.</div>
+        <div class="list-row"><strong>Ward's linkage:</strong> Minimizes total within-cluster variance. Generally produces the most useful clusters.</div>
+        <div class="tip">Hierarchical advantage: no need to specify K, full merge history visible. Disadvantage: slow for large N (O(n²)).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s8">
+    <div class="topic-header"><span class="topic-num">08</span><span class="topic-title">Time Series Analysis</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Components of time series</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Trend:</strong> Long-term underlying direction (upward or downward).</div>
+        <div class="list-row"><strong>Seasonal:</strong> Predictable pattern that repeats every year (or fixed period). Monthly data → period = 12.</div>
+        <div class="list-row"><strong>Cyclical:</strong> Business cycle fluctuations over several years (expansion and recession). Different from seasonal — no fixed period.</div>
+        <div class="list-row"><strong>Irregular:</strong> Random, unpredictable noise.</div>
+        <div class="list-row"><strong>Autocorrelation:</strong> Correlation of a variable with its own past values over time.</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Additive vs multiplicative models</div>
+      <div class="concept-body">
+        <div class="formula">Additive:       Y = Trend + Seasonal + Irregular
+Multiplicative: Y = Trend × Seasonal × Irregular</div>
+        <p><strong>Additive:</strong> Use when seasonal variations are roughly constant regardless of trend level.</p>
+        <p><strong>Multiplicative:</strong> Use when seasonal fluctuations grow proportionally as the trend increases.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Forecasting methods</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Moving average:</strong> Smooths noise to reveal trend. Large window = smoother but lags behind trend changes.</div>
+        <div class="list-row"><strong>Simple Exponential Smoothing (SES):</strong> Weighted average giving more weight to recent values. High α = very responsive. Best for data with NO trend or seasonality. Produces a flat line forecast.</div>
+        <div class="list-row"><strong>Holt's method:</strong> Extends SES with a trend component (α + β). Handles trend, not seasonality.</div>
+        <div class="list-row"><strong>Holt-Winters:</strong> Extends Holt's with a seasonal component (α + β* + γ). Handles both trend AND seasonality. γ controls seasonal smoothing.</div>
+        <div class="tip">SES = flat forecast. Holt = trend line. Holt-Winters = trend + seasonal waves.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s9">
+    <div class="topic-header"><span class="topic-num">09</span><span class="topic-title">Maximum Likelihood Estimation</span></div>
+
+    <div class="concept">
+      <div class="concept-title">MLE fundamentals</div>
+      <div class="concept-body">
+        <p>Find the parameter value that makes the observed data most likely to have occurred.</p>
+        <div class="formula">Likelihood: L(p) = C × p^k × (1−p)^(n−k)
+Log-likelihood: l(p) = ln(C) + k·ln(p) + (n−k)·ln(1−p)
+MLE: set dl/dp = 0 and solve → p̂ = k/n</div>
+        <p>Example: 20 coin flips, 5 heads → MLE for P(heads) = 5/20 = 0.25</p>
+        <p><strong>Why log-likelihood:</strong> Products become sums. Mathematically simpler. Same answer (log is monotonic).</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Properties of MLE</div>
+      <div class="concept-body">
+        <div class="list-row"><strong>Consistency:</strong> As sample size grows, MLE converges to the true parameter value.</div>
+        <div class="list-row"><strong>Efficiency:</strong> In large samples, MLE has the smallest possible variance among good estimators.</div>
+        <div class="list-row"><strong>Asymptotic normality:</strong> In large samples, MLE is approximately normally distributed — allows confidence intervals and hypothesis tests.</div>
+        <div class="list-row"><strong>Invariance:</strong> MLE of f(θ) = f(MLE of θ). If MLE of σ² = 16, then MLE of σ = √16 = 4.</div>
+        <div class="tip">Invariance is the most exam-tested property: always take the function of the estimate, not the other way around.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="smi-s10">
+    <div class="topic-header"><span class="topic-num">10</span><span class="topic-title">Bayesian Inference</span></div>
+
+    <div class="concept">
+      <div class="concept-title">Bayesian framework</div>
+      <div class="concept-body">
+        <div class="formula">Posterior ∝ Likelihood × Prior
+P(θ|Data) ∝ P(Data|θ) × P(θ)</div>
+        <p><strong>Prior P(θ):</strong> Your belief about the parameter before seeing data. Uninformative prior = let data speak.</p>
+        <p><strong>Likelihood P(Data|θ):</strong> How well the parameter explains the observed data.</p>
+        <p><strong>Evidence P(Data):</strong> Marginal likelihood — normalizing constant.</p>
+        <p><strong>Posterior P(θ|Data):</strong> Updated belief after combining prior with evidence. The final result of Bayesian analysis.</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Bayesian updating (worked example)</div>
+      <div class="concept-body">
+        <p>Machine 1: P(M1)=0.30, P(defective|M1)=0.25. Machine 2: P(M2)=0.70, P(defective|M2)=0.05</p>
+        <div class="formula">P(defective) = 0.25×0.30 + 0.05×0.70 = 0.075 + 0.035 = 0.110
+
+P(M1|defective) = (0.25×0.30)/0.110 = 0.075/0.110 ≈ 0.682
+
+Second defective board (use 0.682 as new prior):
+P(defective) = 0.25×0.682 + 0.05×0.318 = 0.1705+0.0159 = 0.1864
+P(M1|both defective) = (0.25×0.682)/0.1864 ≈ 0.915</div>
+        <div class="tip">Each new piece of evidence updates your belief. Two defective boards in a row makes Machine 1 extremely likely (91.5%).</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Frequentist CI vs Bayesian credible interval</div>
+      <div class="concept-body">
+        <p><strong>Frequentist 95% CI:</strong> "If we repeated this experiment 100 times, 95 of those confidence intervals would contain the true parameter." You cannot say the parameter is in THIS interval with 95% probability.</p>
+        <p><strong>Bayesian 95% credible interval:</strong> "Given the data, there is a 95% probability that the true parameter lies in this range." Direct probability statement about the parameter.</p>
+        <div class="tip">Bayesian credible interval says exactly what most people intuitively want — but frequentist CI technically cannot say this.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END SMI -->
+
+</div>
+</div>
+
+<script>
+const structure = {
+  dpp: [
+    {id:'dpp-s1', label:'Data types & attributes'},
+    {id:'dpp-s2', label:'Data quality'},
+    {id:'dpp-s3', label:'Sampling techniques'},
+    {id:'dpp-s4', label:'Preprocessing pipeline'},
+    {id:'dpp-s5', label:'Normalization methods'},
+    {id:'dpp-s6', label:'Binning / smoothing'},
+    {id:'dpp-s7', label:'Attribute selection'},
+    {id:'dpp-s8', label:'SMC and Jaccard'},
+    {id:'dpp-s9', label:'Outlier detection'},
+  ],
+  fe: [
+    {id:'fe-s1', label:'FE fundamentals'},
+    {id:'fe-s2', label:'Encoding categoricals'},
+    {id:'fe-s3', label:'Transformations'},
+    {id:'fe-s4', label:'Feature selection'},
+    {id:'fe-s5', label:'Text features'},
+    {id:'fe-s6', label:'Time-series features'},
+    {id:'fe-s7', label:'Audio features'},
+    {id:'fe-s8', label:'Automated FE'},
+  ],
+  dv: [
+    {id:'dv-s1', label:'7 stages of data viz'},
+    {id:'dv-s2', label:'Storytelling principles'},
+    {id:'dv-s3', label:'Chart types'},
+    {id:'dv-s4', label:'Dashboard design'},
+    {id:'dv-s5', label:'Tableau'},
+    {id:'dv-s6', label:'Power BI & Looker'},
+    {id:'dv-s7', label:'Python visualization'},
+    {id:'dv-s8', label:'Bokeh'},
+  ],
+  smi: [
+    {id:'smi-s1', label:'Linear regression'},
+    {id:'smi-s2', label:'Logistic regression'},
+    {id:'smi-s3', label:'Hypothesis testing'},
+    {id:'smi-s4', label:'ANOVA'},
+    {id:'smi-s5', label:'Chi-square test'},
+    {id:'smi-s6', label:'PCA & factor analysis'},
+    {id:'smi-s7', label:'Cluster analysis'},
+    {id:'smi-s8', label:'Time series'},
+    {id:'smi-s9', label:'MLE'},
+    {id:'smi-s10', label:'Bayesian inference'},
+  ]
+};
+
+let currentSubject = 'dpp';
+
+function buildSidebar(subject) {
+  const sb = document.getElementById('sidebar');
+  sb.innerHTML = '';
+  structure[subject].forEach(item => {
+    const link = document.createElement('a');
+    link.className = 'sidebar-link';
+    link.textContent = item.label;
+    link.onclick = () => {
+      document.getElementById(item.id).scrollIntoView({behavior:'smooth', block:'start'});
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active-link'));
+      link.classList.add('active-link');
+    };
+    sb.appendChild(link);
+  });
+}
+
+function switchSubject(subject, el) {
+  currentSubject = subject;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + subject).classList.add('active');
+  document.querySelectorAll('.stab').forEach(t => {
+    t.className = 'stab s-' + t.getAttribute('data-subject');
+  });
+  document.querySelectorAll('.stab').forEach(t => {
+    if(t.getAttribute('data-subject') === subject) t.classList.add('active');
+  });
+  el.classList.add('active');
+  buildSidebar(subject);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Set data-subject on tabs
+document.querySelectorAll('.stab').forEach((t,i) => {
+  const subjects = ['dpp','fe','dv','smi'];
+  t.setAttribute('data-subject', subjects[i]);
+});
+
+// Init sidebar
+buildSidebar('dpp');
+
+// Scroll spy
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active-link'));
+      const links = document.querySelectorAll('.sidebar-link');
+      const sections = structure[currentSubject];
+      sections.forEach((s,i) => {
+        if(s.id === id && links[i]) links[i].classList.add('active-link');
+      });
+    }
+  });
+}, {rootMargin: '-20% 0px -70% 0px'});
+
+document.querySelectorAll('.topic-section').forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
