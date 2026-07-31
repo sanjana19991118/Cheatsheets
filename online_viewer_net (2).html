@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Interview Kit</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: white;
+            padding: 30px 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 0;
+            color: #93c5fd;
+            font-size: 14px;
+        }
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 12px;
+        }
+        .badge {
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+        h2 {
+            margin: 0;
+            font-size: 16px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .answer-section {
+            font-size: 14px;
+            color: #334155;
+        }
+        .short-answer {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 16px;
+            font-weight: 500;
+            color: #166534;
+        }
+        h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin: 16px 0 8px 0;
+        }
+        ul {
+            margin: 0 0 16px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        strong {
+            color: #0f172a;
+        }
+        .interview-tip {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1e40af;
+            margin-top: 16px;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 40px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Technical Interview Kit</h1>
+            <p>Curated System Design & Version Control Interview Questions & Answers (Extensible Template)</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="badge">System Design</span>
+                <h2>Interviewer: A WhatsApp group has 978 members. You send one message. Is it 1 database write or 978 writes?</h2>
+            </div>
+            <div class="answer-section">
+                <div class="short-answer">
+                    <strong>Short Answer:</strong> From a storage/persistence perspective, it is <strong>1 database write</strong>, but from a networking and distribution (fan-out) perspective, it triggers <strong>978 downstream delivery operations</strong>.
+                </div>
+
+                <h3>Deep Dive: How WhatsApp Handles This</h3>
+                <ul>
+                    <li><strong>The Write Operation (1 Database Write):</strong> When sending a message to a group, the client sends a single request to the server. The server writes that message into the chat history storage once, rather than duplicating it across 978 individual user inboxes in a traditional relational database.</li>
+                    <li><strong>The Fan-Out Delivery Mechanism:</strong> Once stored, the system uses a fan-out model (leveraging high-concurrency systems like Erlang processes) to route the message packet to active user sockets or queue it for offline members.</li>
+                </ul>
+
+                <div class="interview-tip">
+                    <strong>How to Answer in an Interview:</strong> "It depends on whether you mean database persistence or delivery processing. For persistence, it is 1 database write. For distribution/fan-out, the system handles 978 delivery paths to route the message to all active group sessions."
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="badge">Version Control / Git</span>
+                <h2>Interviewer: Your local branch is behind the remote branch. Would you use git pull or git fetch, and why?</h2>
+            </div>
+            <div class="answer-section">
+                <div class="short-answer">
+                    <strong>Short Answer:</strong> You should use <strong>git fetch</strong> first as a best practice to inspect changes safely, though <strong>git pull</strong> combines fetching and merging into a single automated step.
+                </div>
+
+                <h3>Deep Dive: The Difference and Why It Matters</h3>
+                <ul>
+                    <li><strong>git fetch (The Safe Approach):</strong> Downloads remote changes into your local repository's remote-tracking branches (e.g., origin/main) without modifying your working branch. This lets you inspect changes safely using <code>git diff</code> or <code>git log</code> before merging.</li>
+                    <li><strong>git pull (The Shortcut):</strong> Automatically runs <code>git fetch</code> followed immediately by a merge into your current working branch. While faster, it can surprise you with unexpected merge conflicts directly in your workspace.</li>
+                </ul>
+
+                <div class="interview-tip">
+                    <strong>How to Answer in an Interview:</strong> "I would use <code>git fetch</code> first because it's safer. It downloads remote changes so I can inspect them with <code>git diff</code> before integrating. <code>git pull</code> automates both fetching and merging, which is faster but can introduce unexpected conflicts if upstream changes haven't been reviewed."
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="question-header">
+                <span class="badge">System Design / Caching</span>
+                <h2>Interviewer: Your Redis cache suddenly goes down. How would you ensure your application stays available without overwhelming the database?</h2>
+            </div>
+            <div class="answer-section">
+                <div class="short-answer">
+                    <strong>Short Answer:</strong> To keep your application available without crushing the database during a Redis outage, you need a multi-layered defense strategy: <strong>Circuit Breaking</strong>, <strong>Local In-Memory Caching (L1)</strong>, <strong>Graceful Degradation (Stale-While-Revalidate)</strong>, and <strong>Database Load Shedding/Rate Limiting</strong>.
+                </div>
+
+                <h3>Deep Dive: How to Handle a Redis Outage Gracefully</h3>
+                <ul>
+                    <li><strong>1. Circuit Breaker Pattern:</strong> Implement a circuit breaker (using libraries like Resilience4j or Polly). When Redis throws continuous connection errors or timeouts, the circuit "trips" and opens. Instead of every single request continuing to hammer a dead cache server and timing out, the application instantly stops trying to reach Redis for a configured cooldown period, failing over directly to safety measures.</li>
+                    <li><strong>2. Local In-Memory Cache (L1 Cache):</strong> Maintain a small, short-lived fallback cache directly inside the application node's memory (e.g., using Guava Cache, Node-Cache, or a simple LRU dictionary) for ultra-hot data. If Redis goes down, your app can serve hot reads from local memory instead of routing every request down to the persistent database.</li>
+                    <li><strong>3. Graceful Degradation & Stale Data (Stale-While-Revalidate):</strong> If the primary data source or remote cache fails, configure your application to return stale/default data or static fallback responses rather than throwing a hard 500 Internal Server Error. Users prefer seeing slightly outdated data over an entirely broken application or a loading spinner that never finishes.</li>
+                    <li><strong>4. Rate Limiting and Load Shedding:</strong> Protect your database from a massive "thundering herd" effect by implementing rate limits or request queues on incoming traffic. If thousands of concurrent requests suddenly bypass the dead cache and hit the database simultaneously, the database will lock up or crash. Shedding excess load keeps the core database alive.</li>
+                </ul>
+
+                <div class="interview-tip">
+                    <strong>How to Answer in an Interview:</strong> "If Redis goes down, the biggest risk is a thundering herd crashing the database. To prevent this, I would use a Circuit Breaker to quickly stop calls to the dead cache, fall back to a local in-memory (L1) cache or stale data for critical reads, and apply rate limiting to shed excess traffic so the database doesn't get overwhelmed."
+                </div>
+            </div>
+        </div>
+
+        <!-- Template for future questions: Just copy and paste another .question-card block here -->
+
+        <div class="footer-note">
+            Technical Interview Kit &bull; Extensible Document Template (Ready for future questions)
+        </div>
+    </div>
+
+</body>
+</html>
