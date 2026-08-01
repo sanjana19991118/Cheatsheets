@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Event-Driven CSV Processing Pipeline Guide</title>
+    <style>
+        :root {
+            --primary-color: #232f3e;
+            --accent-color: #ff9900;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #16191f;
+            --border-color: #eaedd1;
+            --code-bg: #f1f3f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #545b64;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 12px;
+            margin-top: 35px;
+            font-size: 20px;
+        }
+
+        h3 {
+            color: #232f3e;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        pre {
+            background-color: #1b2a4a;
+            color: #f8f9fa;
+            padding: 18px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .screenshot-box {
+            background-color: #fff8e6;
+            border: 1px solid #ffe0b2;
+            border-left: 5px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .screenshot-box span {
+            color: #e65100;
+            font-weight: bold;
+        }
+
+        .badge {
+            background-color: #e7f3fe;
+            color: #0c5460;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li::before {
+            content: "☐ ";
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85em;
+            color: #687078;
+            border-top: 1px solid #eaedd1;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>AWS Event-Driven CSV Processing Pipeline Setup Guide</h1>
+        <p class="subtitle">Complete Step-by-Step Walkthrough, Code, and Screenshot Checklists</p>
+    </header>
+
+    <section>
+        <h2>0. IAM User & Sign-In Verification</h2>
+        <p>Before creating resources, ensure you are logged into AWS using your non-root IAM user.</p>
+        <ol>
+            <li>Go to <a href="https://console.aws.amazon.com/" target="_blank">AWS Sign-In Console</a>.</li>
+            <li>Select <strong>IAM user</strong>.</li>
+            <li>Enter your 12-digit Account ID and click <strong>Next</strong>.</li>
+            <li>Enter IAM User Name: <code>Assignment</code> and your password.</li>
+            <li><strong>Verification:</strong> Check the top-right corner of the console. It should display: <br><code>Assignment @ [your-account-id]</code></li>
+            <li><strong>AWS Region:</strong> Keep all resources in the same region (e.g., <code>Europe (Stockholm) eu-north-1</code>).</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>1. Step-by-Step Resource Setup (Part C)</h2>
+
+        <h3>1.1 Amazon S3 Setup</h3>
+        <ol>
+            <li>Open the <strong>Amazon S3 Console</strong> &rarr; Click <strong>Create bucket</strong>.</li>
+            <li><strong>Bucket name:</strong> Enter a globally unique, lowercase name (e.g., <code>assignment-csv-pipeline-[yourname]</code>).</li>
+            <li><strong>AWS Region:</strong> Select <code>eu-north-1</code> (Europe - Stockholm).</li>
+            <li>Keep default settings (Block Public Access ON, Encryption enabled) and click <strong>Create bucket</strong>.</li>
+            <li>Click into your new bucket &rarr; Click <strong>Upload</strong> &rarr; <strong>Add files</strong>.</li>
+            <li>Upload a test CSV dataset (e.g., <code>sample_data.csv</code>).</li>
+        </ol>
+        <div class="screenshot-box">
+            <span>📸 Screenshot #1 Required:</span> Take a screenshot of the S3 bucket page showing the uploaded CSV object listed under the <strong>Objects</strong> tab.
+        </div>
+
+        <h3>1.2 Amazon DynamoDB Setup</h3>
+        <ol>
+            <li>Open the <strong>Amazon DynamoDB Console</strong> &rarr; Click <strong>Create table</strong>.</li>
+            <li><strong>Table name:</strong> <code>FileProcessingMetadata</code> <span class="badge">Must match code exactly</span></li>
+            <li><strong>Partition key:</strong> <code>file_name</code> (Select <strong>String</strong>).</li>
+            <li>Leave settings as <strong>Default settings</strong> (On-Demand capacity).</li>
+            <li>Click <strong>Create table</strong> and wait until status becomes <strong>Active</strong>.</li>
+        </ol>
+
+        <h3>1.3 IAM Role Setup (Created via Root)</h3>
+        <p>Since the <code>Assignment</code> user operates under restricted permissions, create the Lambda execution role via Root user:</p>
+        <ol>
+            <li>Log into AWS as <strong>Root user</strong> &rarr; Open <strong>IAM Console</strong> &rarr; <strong>Roles</strong> &rarr; <strong>Create role</strong>.</li>
+            <li>Select <strong>AWS service</strong> &rarr; <strong>Lambda</strong> &rarr; Click <strong>Next</strong>.</li>
+            <li>Attach the following policies:
+                <ul>
+                    <li><code>AWSLambdaBasicExecutionRole</code></li>
+                    <li><code>AmazonS3ReadOnlyAccess</code></li>
+                    <li><code>AmazonDynamoDBFullAccess</code></li>
+                </ul>
+            </li>
+            <li>Name the role <code>LambdaPipelineRole</code> &rarr; Click <strong>Create role</strong>.</li>
+            <li>Sign out of Root and sign back in as the <strong>Assignment</strong> user.</li>
+        </ol>
+
+        <h3>1.4 AWS Lambda Setup</h3>
+        <ol>
+            <li>Open the <strong>AWS Lambda Console</strong> &rarr; Click <strong>Create function</strong>.</li>
+            <li>Select <strong>Author from scratch</strong>.</li>
+            <li><strong>Function name:</strong> <code>FileProcessingPipeline</code></li>
+            <li><strong>Runtime:</strong> Select <strong>Python 3.12</strong> (or Python 3.11).</li>
+            <li><strong>Permissions:</strong> Expand <em>Change default execution role</em> &rarr; Select <strong>Use an existing role</strong> &rarr; Choose <code>LambdaPipelineRole</code>.</li>
+            <li>Click <strong>Create function</strong>.</li>
+        </ol>
+
+        <h3>1.5 Deploy Baseline Python Code</h3>
+        <p>In the Lambda function's <strong>Code</strong> tab, replace existing code with the following snippet and click <strong>Deploy</strong>:</p>
+
+<pre><code>import json
+import boto3
+import datetime
+import csv
+import io
+import os
+
+s3_client = boto3.client('s3')
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('FileProcessingMetadata')
+
+def lambda_handler(event, context):
+    record = event['Records'][0]
+    bucket_name = record['s3']['bucket']['name']
+    file_key = record['s3']['object']['key']
+    file_size = record['s3']['object']['size']
+    file_extension = os.path.splitext(file_key)[1].lower()
+    timestamp = datetime.datetime.utcnow().isoformat()
+    
+    rows = None
+    columns = None
+    
+    if file_extension != '.csv':
+        print(f"Unsupported file type: {file_extension}")
+        return {"statusCode": 400, "body": "Only CSV files are supported"}
+    
+    # Download CSV from S3
+    response = s3_client.get_object(Bucket=bucket_name, Key=file_key)
+    content = response['Body'].read().decode('utf-8')
+    
+    csv_reader = csv.reader(io.StringIO(content))
+    data = list(csv_reader)
+    
+    rows = len(data) - 1 if len(data) > 1 else 0
+    columns = len(data[0]) if data else 0
+    
+    log_message = {
+        "file_name": file_key,
+        "file_type": file_extension,
+        "file_size_bytes": file_size,
+        "rows": rows,
+        "columns": columns,
+        "processed_at": timestamp
+    }
+    
+    print("Processed File Metrics:", json.dumps(log_message))
+    
+    # Insert record into DynamoDB
+    table.put_item(
+        Item={
+            "file_name": file_key,
+            "processed_at": timestamp,
+            "file_type": file_extension,
+            "file_size_bytes": file_size,
+            "rows": rows,
+            "columns": columns
+        }
+    )
+    
+    return {
+        "statusCode": 200,
+        "body": json.dumps(log_message)
+    }</code></pre>
+
+        <h3>1.6 Add S3 Trigger to Lambda</h3>
+        <ol>
+            <li>In the <strong>Function overview</strong> diagram on your Lambda page, click <strong>+ Add trigger</strong>.</li>
+            <li>Select <strong>S3</strong> from the dropdown.</li>
+            <li><strong>Bucket:</strong> Select your created S3 bucket.</li>
+            <li><strong>Event type:</strong> Select <strong>All object create events</strong> (<code>s3:ObjectCreated:*</code>).</li>
+            <li>Check the acknowledgment box for recursive invocation risks &rarr; Click <strong>Add</strong>.</li>
+        </ol>
+        <div class="screenshot-box">
+            <span>📸 Screenshot #2 Required:</span> Take a screenshot of the Lambda <strong>Function Overview</strong> page showing the S3 trigger box linked to your <code>FileProcessingPipeline</code> function.
+        </div>
+    </section>
+
+    <section>
+        <h2>2. Testing & Validation (Part D)</h2>
+        <ol>
+            <li>Go back to <strong>Amazon S3</strong> and upload a new or test CSV file.</li>
+            <li>Open <strong>CloudWatch Console</strong> &rarr; <strong>Log management</strong> &rarr; <strong>Log groups</strong>.</li>
+            <li>Select <code>/aws/lambda/FileProcessingPipeline</code> &rarr; Click the latest Log Stream.</li>
+            <li>Expand the <code>Processed File Metrics:</code> JSON output.</li>
+        </ol>
+        <div class="screenshot-box">
+            <span>📸 Screenshot #3 Required:</span> Capture the CloudWatch log output displaying the formatted JSON event object (showing <code>file_name</code>, <code>rows</code>, <code>columns</code>, <code>file_size_bytes</code>, and <code>processed_at</code>).
+        </div>
+        <ol start="5">
+            <li>Open <strong>DynamoDB Console</strong> &rarr; <strong>Explore items</strong> &rarr; Select <code>FileProcessingMetadata</code>.</li>
+        </ol>
+        <div class="screenshot-box">
+            <span>📸 Screenshot #4 Required:</span> Capture the DynamoDB table grid showing the newly populated row matching your CSV file execution metrics.
+        </div>
+    </section>
+
+    <footer>
+        <p>AWS Event-Driven CSV Processing Pipeline Guide &bull; Generated for Assignment Documentation</p>
+    </footer>
+</div>
+
+</body>
+</html>
