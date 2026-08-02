@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Outcome Analysis & Neural Network Classification Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #1a252f;
+            color: white;
+            padding: 35px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { margin: 0; font-size: 30px; font-weight: 700; }
+        p.subtitle { margin: 10px 0 0 0; color: #bdc3c7; font-size: 16px; }
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 22px;
+        }
+        h3 { color: #2980b9; margin-top: 25px; font-size: 18px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+        code {
+            background: #edf2f7;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            color: #c53030;
+            font-size: 13px;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .highlight-box {
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .metric-badge {
+            display: inline-block;
+            background: #38a169;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Student Academic Outcome Prediction Report</h1>
+    <p class="subtitle">Complete Data Pipeline, Neural Network Architecture, Evaluation & Strategic Recommendations</p>
+</header>
+
+<!-- SECTION A -->
+<section>
+    <h2>Section A: Data Preprocessing & Pipeline Flow</h2>
+    <p>The dataset contains demographic, socio-economic, and academic performance metrics. To prepare the raw dataset for feedforward neural network training, the following data processing steps were executed:</p>
+    
+    <ul>
+        <li><strong>Dataset Inspection:</strong> Assessed target distribution ($N = 4,424$, $36$ features) and confirmed zero missing or null entries across all attributes.</li>
+        <li><strong>Feature & Target Separation:</strong> Separated input matrix $X$ ($36$ features) from multi-class categorical target vector $y$ (Dropout, Enrolled, Graduate).</li>
+        <li><strong>Target Encoding:</strong> One-hot encoded target outputs into binary indicator vectors: <code>Dropout ➔ [1, 0, 0]</code>, <code>Enrolled ➔ [0, 1, 0]</code>, <code>Graduate ➔ [0, 0, 1]</code>.</li>
+        <li><strong>Stratified Train-Test Split:</strong> Applied an $80/20$ stratified split ($N_{	ext{train}} = 3,539$, $N_{	ext{test}} = 885$) to preserve target class proportions across subsets.</li>
+        <li><strong>Feature Standardization:</strong> Standardized numerical variables using <code>StandardScaler</code> fitted solely on the training set to eliminate data leakage.</li>
+    </ul>
+
+    <h3>Python Implementation Code (Section A)</h3>
+<pre><code>import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.utils import to_categorical
+
+# 1. Load Dataset
+df = pd.read_csv('ann-datatset.csv')
+
+# 2. Separate Features and Target
+X = df.drop(columns=['Target'])
+y_raw = df['Target']
+
+# 3. Target Encoding (One-Hot)
+target_map = {'Dropout': 0, 'Enrolled': 1, 'Graduate': 2}
+y_encoded = to_categorical(y_raw.map(target_map))
+
+# 4. Stratified Train-Test Split (80% Train, 20% Test)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y_encoded, test_size=0.20, random_state=42, stratify=y_raw
+)
+
+# 5. Feature Scaling (StandardScaler)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+</code></pre>
+</section>
+
+<!-- SECTION B -->
+<section>
+    <h2>Section B: Exploratory Data Analysis (EDA)</h2>
+    <p>Empirical data analysis identified key operational drivers that differentiate graduating students from dropouts:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Metric / Dimension</th>
+                <th>Dropout (%)</th>
+                <th>Enrolled (%)</th>
+                <th>Graduate (%)</th>
+                <th>Operational Insight</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Tuition Fees NOT Up to Date</strong></td>
+                <td>86.55%</td>
+                <td>7.95%</td>
+                <td>5.49%</td>
+                <td>Unpaid tuition is the single strongest predictor of attrition.</td>
+            </tr>
+            <tr>
+                <td><strong>Scholarship Holder</strong></td>
+                <td>12.19%</td>
+                <td>11.83%</td>
+                <td>75.98%</td>
+                <td>Financial support directly boosts retention and completion rates.</td>
+            </tr>
+            <tr>
+                <td><strong>1st Sem Approved Units (Mean)</strong></td>
+                <td>2.55</td>
+                <td>4.32</td>
+                <td>6.23</td>
+                <td>Early academic friction in Term 1 strongly separates outcomes.</td>
+            </tr>
+            <tr>
+                <td><strong>Age at Enrollment: 18–21</strong></td>
+                <td>22.14%</td>
+                <td>18.79%</td>
+                <td>59.07%</td>
+                <td>Traditional-age students display high retention and success rates.</td>
+            </tr>
+            <tr>
+                <td><strong>Age at Enrollment: 26–30</strong></td>
+                <td>59.79%</td>
+                <td>14.88%</td>
+                <td>25.33%</td>
+                <td>Mature students face higher attrition due to external life pressures.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Key Insights Summary:</strong><br>
+        • <strong>Financial Stress:</strong> Over $86\%$ of students with tuition defaults drop out.<br>
+        • <strong>First-Term Momentum:</strong> Graduates approve more than double the credit units ($6.23$) compared to dropouts ($2.55$) in Semester 1.<br>
+        • <strong>Demographic Risk:</strong> Non-traditional adult learners (ages 26–30) experience a dropout rate of nearly $60\%$.
+    </div>
+</section>
+
+<!-- SECTION C -->
+<section>
+    <h2>Section C: Neural Network Modeling</h2>
+    <p>A multi-layer feedforward neural network was designed using Keras. Structural regularization (Dropout) was integrated to prevent overfitting and guarantee strong generalization on unseen test data.</p>
+    
+    <h3>Model Structural Justifications:</h3>
+    <ul>
+        <li><strong>Input Layer:</strong> 36 standardized numerical features.</li>
+        <li><strong>Hidden Layer 1:</strong> 64 Neurons with <code>ReLU</code> activation and a $20\%$ Dropout layer.</li>
+        <li><strong>Hidden Layer 2:</strong> 32 Neurons with <code>ReLU</code> activation and a $10\%$ Dropout layer.</li>
+        <li><strong>Output Layer:</strong> 3 Neurons with <code>Softmax</code> activation outputting normalized class probability distributions.</li>
+        <li><strong>Optimization & Loss:</strong> Compiled with <code>Categorical Cross-Entropy</code> loss and the <code>Adam</code> optimizer.</li>
+    </ul>
+
+    <h3>Python Training Code (Section C)</h3>
+<pre><code>import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# 1. Model Architecture Setup
+model = Sequential([
+    Dense(64, activation='relu', input_shape=(X_train_scaled.shape[1],), name="Hidden_Layer_1"),
+    Dropout(0.20, name="Dropout_1"),
+    Dense(32, activation='relu', name="Hidden_Layer_2"),
+    Dropout(0.10, name="Dropout_2"),
+    Dense(3, activation='softmax', name="Output_Layer")
+])
+
+# 2. Model Compilation
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# 3. Model Training
+history = model.fit(
+    X_train_scaled, y_train,
+    epochs=50,
+    batch_size=32,
+    validation_split=0.15,
+    verbose=1
+)
+</code></pre>
+</section>
+
+<!-- SECTION D -->
+<section>
+    <h2>Section D: Evaluation & Error Analysis</h2>
+    <p>The trained neural network achieved an overall test accuracy of <span class="metric-badge">75.25%</span> and a Macro F1-Score of <span class="metric-badge">0.686</span> across the evaluation set ($N = 885$).</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Class Outcome</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Support</th>
+                <th>Operational Context</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Dropout</strong></td>
+                <td>0.790</td>
+                <td>0.729</td>
+                <td>0.758</td>
+                <td>284</td>
+                <td>Robust identification of at-risk students for early intervention.</td>
+            </tr>
+            <tr>
+                <td><strong>Enrolled</strong></td>
+                <td>0.484</td>
+                <td>0.384</td>
+                <td>0.428</td>
+                <td>159</td>
+                <td>Intermediate state with significant feature boundary overlap.</td>
+            </tr>
+            <tr>
+                <td><strong>Graduate</strong></td>
+                <td>0.801</td>
+                <td>0.898</td>
+                <td>0.847</td>
+                <td>442</td>
+                <td>High sensitivity in identifying successful completions.</td>
+            </tr>
+            <tr>
+                <td><strong>Macro Average</strong></td>
+                <td>0.692</td>
+                <td>0.670</td>
+                <td>0.686</td>
+                <td>885</td>
+                <td>Unweighted average performance across all class outcomes.</td>
+            </tr>
+            <tr>
+                <td><strong>Weighted Average</strong></td>
+                <td>0.741</td>
+                <td>0.753</td>
+                <td>0.743</td>
+                <td>885</td>
+                <td>Class-proportionate global metric performance.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Confusion Matrix Analysis</h3>
+<pre><code>                        Predicted Class
+                   Dropout   Enrolled   Graduate
+Actual  Dropout     207         37         40
+Class   Enrolled     39         61         59
+        Graduate     16         28        398
+</code></pre>
+
+    <ul>
+        <li><strong>Graduate Class Accuracy:</strong> High recall ($89.8\%$), correctly identifying $398$ out of $442$ actual graduates.</li>
+        <li><strong>Dropout Detection:</strong> Reliable recall ($72.9\%$), successfully capturing $207$ out of $284$ dropouts for early institutional intervention.</li>
+        <li><strong>Enrolled Overlap:</strong> The active <code>Enrolled</code> state exhibits feature overlap, with $37.1\%$ classified as <code>Graduate</code> and $24.5\%$ as <code>Dropout</code>.</li>
+    </ul>
+
+    <h3>Python Evaluation Code (Section D)</h3>
+<pre><code>import numpy as np
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
+
+# 1. Predictions
+y_pred_probs = model.predict(X_test_scaled)
+y_pred_classes = np.argmax(y_pred_probs, axis=1)
+y_true_classes = np.argmax(y_test, axis=1)
+
+# 2. Print Summary Metrics
+print(f"Overall Test Accuracy : {accuracy_score(y_true_classes, y_pred_classes):.2%}")
+print(f"Macro F1-Score        : {f1_score(y_true_classes, y_pred_classes, average='macro'):.3f}")
+print(f"Weighted F1-Score     : {f1_score(y_true_classes, y_pred_classes, average='weighted'):.3f}")
+
+# 3. Print Full Classification Report
+labels = ['Dropout', 'Enrolled', 'Graduate']
+print(classification_report(y_true_classes, y_pred_classes, target_names=labels, digits=3))
+</code></pre>
+</section>
+
+<!-- SECTION E -->
+<section>
+    <h2>Section E: Strategic Recommendations & Conclusion</h2>
+    
+    <h3>Actionable Recommendations</h3>
+    <ol>
+        <li><strong>Automated Financial Hold Mitigation & Micro-Grants:</strong> Trigger early warnings at Week 4 for pending tuition fees and deploy emergency micro-grants to mitigate the $86.55\%$ dropout rate associated with unpaid balances.</li>
+        <li><strong>First-Semester Academic Tutoring Triggers:</strong> Mandate academic advising for students passing fewer than 3 modules in Semester 1 to address credit accumulation barriers early.</li>
+        <li><strong>Flexible Pathways for Mature Learners:</strong> Introduce hybrid/evening classes to reduce the elevated dropout rate ($59.79\%$) observed in adult students aged 26–30.</li>
+    </ol>
+
+    <h3>Final Conclusion</h3>
+    <p>The multi-layer feedforward neural network predicts student outcomes with $75.25\%$ accuracy. By integrating model predictions with proactive institutional policies, university administrators can transition from reactive monitoring to early targeted intervention, increasing retention and graduation rates.</p>
+</section>
+
+</body>
+</html>
