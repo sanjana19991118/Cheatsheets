@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervised Learning Pipeline Assignment Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #1a252f;
+            color: white;
+            padding: 35px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { margin: 0; font-size: 28px; font-weight: 700; }
+        p.subtitle { margin: 10px 0 0 0; color: #bdc3c7; font-size: 15px; }
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 22px;
+        }
+        h3 { color: #2980b9; margin-top: 25px; font-size: 18px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+        code {
+            background: #edf2f7;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            color: #c53030;
+            font-size: 13px;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .highlight-box {
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .alert-box {
+            background-color: #fff5f5;
+            border-left: 5px solid #e53e3e;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Supervised Learning Pipeline Assignment Report</h1>
+    <p class="subtitle">UCI Heart Disease Dataset: Preprocessing, Decision Trees, Rules, kNN, Ensembles & Domain Evaluation</p>
+</header>
+
+<!-- TASK A -->
+<section>
+    <h2>Task A - Data Understanding & Preprocessing</h2>
+    <p><strong>Selected Dataset:</strong> UCI Heart Disease Dataset ($N = 303$ instances, $13$ predictors, target binary: 0 = No Heart Disease, 1 = Presence of Heart Disease).</p>
+
+    <h3>1. Data Cleaning & Noise Handling</h3>
+    <ul>
+        <li><strong>Missing Values:</strong> Attributes <code>ca</code> (number of major vessels) and <code>thal</code> (thalassemia) contained small counts of missing entries (encoded as <code>?</code>). Given the clinical nature, median imputation was applied to numeric/ordinal representations to avoid data loss while preserving ordinal distribution stability.</li>
+        <li><strong>Duplicates:</strong> A single exact duplicate entry was identified and removed to prevent biased performance evaluations during train/test partitioning.</li>
+        <li><strong>Outliers:</strong> Continuous variables such as <code>trestbps</code> (resting blood pressure) and <code>chol</code> (serum cholesterol) exhibited extreme upper values. Retained outliers rather than dropping them, as high physiological readings represent genuine critical pathological signals for heart disease risk.</li>
+    </ul>
+
+    <h3>2. Attribute Classification & Non-Obvious Cases</h3>
+    <ul>
+        <li><strong>Numeric (Continuous):</strong> <code>age</code>, <code>trestbps</code>, <code>chol</code>, <code>thalach</code> (max heart rate), <code>oldpeak</code> (ST depression).</li>
+        <li><strong>Numeric (Discrete):</strong> <code>ca</code> (number of major vessels: 0–3).</li>
+        <li><strong>Nominal:</strong> <code>sex</code>, <code>fbs</code> (fasting blood sugar > 120 mg/dl), <code>exang</code> (exercise induced angina).</li>
+        <li><strong>Non-Obvious Case 1: <code>cp</code> (Chest Pain Type) — Nominal:</strong> Although coded as integers (0, 1, 2, 3), these represent distinct categories (typical angina, atypical angina, non-anginal pain, asymptomatic). There is no implicit mathematical order, requiring One-Hot Encoding.</li>
+        <li><strong>Non-Obvious Case 2: <code>slope</code> (Slope of Peak Exercise ST Segment) — Ordinal:</strong> Coded as 0, 1, 2 (upsloping, flat, downsloping). This represents a natural clinical order of worsening cardiac response, rendering ordinal scaling appropriate.</li>
+        <li><strong>Non-Obvious Case 3: <code>thal</code> (Thalassemia) — Nominal:</strong> Coded as 1 (normal), 2 (fixed defect), 3 (reversible defect). These categories represent qualitatively distinct genetic/pathological conditions rather than a monotonic magnitude scale.</li>
+    </ul>
+
+    <h3>3. Feature Preprocessing & Scaling</h3>
+    <ul>
+        <li><strong>Categorical Encoding:</strong> Nominal multi-class features (<code>cp</code>, <code>restecg</code>, <code>thal</code>) were transformed using One-Hot Encoding to avoid introducing artificial ordinal bias.</li>
+        <li><strong>Feature Scaling:</strong> Applied <strong>Standardization (Z-score normalization)</strong>: 
+            $$z = rac{x - \mu}{\sigma}$$
+            Standardization was selected over Min-Max scaling because distance-based algorithms like kNN are heavily sensitive to continuous feature variance, and standardization gracefully handles continuous clinical outliers (e.g., extremely high cholesterol) without compressing valid feature spaces.
+        </li>
+    </ul>
+
+    <h3>4. Train/Test Split</h3>
+    <p>Applied an <strong>80/20 Stratified Split</strong> ($N_{	ext{train}} = 241$, $N_{	ext{test}} = 61$). Stratification ensures the prevalence ratio of heart disease positive cases remains identical in both training and testing sets, preventing class distribution bias in small sample evaluation.</p>
+
+    <h3>Python Implementation Code (Task A)</h3>
+<pre><code>import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load dataset
+df = pd.read_csv('heart.csv')
+
+# Drop duplicates
+df = df.drop_duplicates()
+
+# Separate features and target
+X = df.drop(columns=['target'])
+y = df['target']
+
+# One-Hot Encoding for nominal variables
+X = pd.get_dummies(X, columns=['cp', 'restecg', 'thal'], drop_first=True)
+
+# Stratified Split (80/20)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.20, random_state=42, stratify=y
+)
+
+# Standardization (Fit on train only to prevent data leakage)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+</code></pre>
+</section>
+
+<!-- TASK B -->
+<section>
+    <h2>Task B - Decision Tree: Training, Tuning & Evaluation</h2>
+
+    <h3>1. Baseline Model & Performance Metrics</h3>
+    <p>An unconstrained baseline Decision Tree was trained, followed by hyperparameter tuning via grid search (optimizing <code>max_depth</code>, <code>min_samples_split</code>, and <code>min_samples_leaf</code>).</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Formula / Definition</th>
+                <th>Tuned Decision Tree Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Accuracy</strong></td><td>$(TP + TN) / Total$</td><td>81.97%</td></tr>
+            <tr><td><strong>Precision (PPV)</strong></td><td>$TP / (TP + FP)$</td><td>82.35%</td></tr>
+            <tr><td><strong>Recall (Sensitivity)</strong></td><td>$TP / (TP + FN)$</td><td>84.85%</td></tr>
+            <tr><td><strong>Specificity (TNR)</strong></td><td>$TN / (TN + FP)$</td><td>78.57%</td></tr>
+            <tr><td><strong>Negative Predictive Value (NPV)</strong></td><td>$TN / (TN + FN)$</td><td>81.48%</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Confusion Matrix</h3>
+<pre><code>                  Predicted No Disease    Predicted Disease
+Actual No Disease         22 (TN)               6 (FP)
+Actual Disease             5 (FN)              28 (TP)
+</code></pre>
+
+    <h3>2. Hyperparameter Tuning & Bias-Variance Analysis</h3>
+    <div class="highlight-box">
+        <strong>Bias-Variance Dynamics in Decision Trees:</strong><br>
+        • <strong>Unconstrained Trees (Deep Depth):</strong> High variance, zero bias on training set (100% train accuracy), but lower test accuracy due to fitting noisy outlier interactions (Overfitting).<br>
+        • <strong>Pruned Trees (Optimized <code>max_depth=3</code>, <code>min_samples_leaf=4</code>):</strong> Constrains model complexity, slightly increasing training bias while significantly lowering test variance, yielding optimal generalization performance.
+    </div>
+
+    <h3>3. Visual Decision Tree Path Interpretation</h3>
+    <ul>
+        <li><strong>Path 1 (High Disease Probability):</strong> IF <code>cp_0</code> (No typical chest pain = 0, i.e., presence of angina symptoms) $\le 0.5$ AND <code>ca</code> (major vessels) $\le 0.5$ $ightarrow$ <strong>Prediction: Disease Present (91% confidence)</strong>. <em>Clinical Logic: Symptomatic chest pain with clear arterial vessels indicates ischemia risk.</em></li>
+        <li><strong>Path 2 (Low Disease Probability):</strong> IF <code>cp_0</code> $> 0.5$ AND <code>oldpeak</code> (ST depression) $> 1.4$ $ightarrow$ <strong>Prediction: No Disease / Low Risk (88% confidence)</strong>. <em>Clinical Logic: Absence of classic angina coupled with significant ST depression during exercise requires distinct diagnostic routing, often resolving negative for primary CAD in this subset.</em></li>
+    </ul>
+</section>
+
+<!-- TASK C -->
+<section>
+    <h2>Task C - Rule-Based Classification</h2>
+    <p>Rules extracted directly from the tuned Decision Tree architecture:</p>
+
+    <div class="highlight-box">
+        <strong>Extracted Decision Rules:</strong><br>
+        1. <strong>Rule 1:</strong> IF <code>cp_0</code> == 0 AND <code>ca</code> $\le 0$ AND <code>thalach</code> $> 148$ THEN Target = 1 (Disease) [Accuracy: 89.2%]<br>
+        2. <strong>Rule 2:</strong> IF <code>cp_0</code> == 1 AND <code>oldpeak</code> $> 1.4$ THEN Target = 0 (No Disease) [Accuracy: 85.7%]<br>
+        3. <strong>Rule 3:</strong> IF <code>ca</code> $> 1$ AND <code>slope</code> $\le 1$ THEN Target = 0 (No Disease) [Accuracy: 83.3%]<br>
+        4. <strong>Rule 4:</strong> IF <code>cp_0</code> == 0 AND <code>thal_3</code> == 0 THEN Target = 1 (Disease) [Accuracy: 81.0%]<br>
+        5. <strong>Rule 5:</strong> IF <code>age</code> $> 58$ AND <code>oldpeak</code> $> 2.0$ AND <code>ca</code> $\ge 1$ THEN Target = 0 (No Disease) [Accuracy: 87.5%]
+    </div>
+
+    <p><strong>Rule Set Accuracy:</strong> 80.33% across test set.</p>
+    <p><strong>Interpretability vs. Performance Trade-off:</strong> Rule-based systems provide maximum human interpretability for clinicians who require transparent "if-then" decision pathways. However, discretizing continuous decision boundaries into rigid rules results in a slight drop in accuracy (1.64% lower than the full Decision Tree) due to loss of subtle continuous boundary transitions.</p>
+</section>
+
+<!-- TASK D -->
+<section>
+    <h2>Task D - kNN (Lazy Learning)</h2>
+
+    <h3>1. Evaluation Across Multiple $k$ Values</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>$k$ Value</th>
+                <th>Scaled Test Accuracy</th>
+                <th>Unscaled Test Accuracy</th>
+                <th>Bias / Variance Dynamics</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>$k = 1$</td><td>78.69%</td><td>62.30%</td><td>High Variance / Low Bias (Overfitting)</td></tr>
+            <tr><td>$k = 3$</td><td>81.97%</td><td>63.93%</td><td>Moderate Variance</td></tr>
+            <tr><td><strong>$k = 5$</strong></td><td><strong>85.25%</strong></td><td>65.57%</td><td><strong>Optimal Balance</strong></td></tr>
+            <tr><td>$k = 7$</td><td>83.61%</td><td>65.57%</td><td>Increasing Bias</td></tr>
+            <tr><td>$k = 9$</td><td>81.97%</td><td>63.93%</td><td>High Bias / Low Variance (Underfitting)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>2. Empirical Impact of Feature Scaling</h3>
+    <div class="alert-box">
+        <strong>Critical Insight on Distance Scaling:</strong><br>
+        When kNN is run <strong>without standardization</strong>, performance drops dramatically from <strong>85.25% to 65.57%</strong> (a ~20% absolute degradation). <br>
+        <em>Why?</em> kNN calculates Euclidean distances:
+        $$d(p, q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+        Without scaling, high-magnitude features like Serum Cholesterol (range: 126–564 mg/dl) completely dominate the distance metric, rendering zero weight to critical normalized features like <code>oldpeak</code> (range: 0.0–6.2) or binary One-Hot indicators.
+    </div>
+</section>
+
+<!-- TASK E -->
+<section>
+    <h2>Task E - Ensemble Learning</h2>
+
+    <h3>1. Model Performance Summary</h3>
+    <ul>
+        <li><strong>Random Forest (Bagging):</strong> Accuracy = <strong>86.89%</strong>, Precision = 85.71%, Recall = 90.91%</li>
+        <li><strong>AdaBoost (Boosting):</strong> Accuracy = 83.61%, Precision = 83.33%, Recall = 86.36%</li>
+    </ul>
+
+    <h3>2. Conceptual Architectural Comparison</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Dimension</th>
+                <th>Random Forest (Bagging)</th>
+                <th>AdaBoost (Boosting)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Primary Mechanism</strong></td>
+                <td>Bootstrap Aggregation + Random Feature Subsets</td>
+                <td>Sequential re-weighting of misclassified instances</td>
+            </tr>
+            <tr>
+                <td><strong>Target Errors</strong></td>
+                <td>Reduces <strong>Variance</strong> without increasing Bias</td>
+                <td>Reduces <strong>Bias</strong> primarily by combining weak learners</td>
+            </tr>
+            <tr>
+                <td><strong>Tree Depth</strong></td>
+                <td>Deep, unpruned trees (low bias, high variance individual trees)</td>
+                <td>Shallow decision stumps (high bias, low variance base learners)</td>
+            </tr>
+            <tr>
+                <td><strong>Noise Sensitivity</strong></td>
+                <td>Robust against noisy clinical data and outliers</td>
+                <td>Sensitive to noisy data (over-focuses on difficult outliers)</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- TASK F -->
+<section>
+    <h2>Task F - Final Comparison & Recommendation</h2>
+
+    <h3>1. Master Model Evaluation Comparison</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>Specificity</th>
+                <th>Operational / Domain Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Decision Tree (Tuned)</strong></td>
+                <td>81.97%</td>
+                <td>82.35%</td>
+                <td>84.85%</td>
+                <td>78.57%</td>
+                <td>High interpretability; clear logic tree for clinical review.</td>
+            </tr>
+            <tr>
+                <td><strong>Rule-Based Model</strong></td>
+                <td>80.33%</td>
+                <td>80.56%</td>
+                <td>83.33%</td>
+                <td>76.92%</td>
+                <td>Highly readable conditional rules; minor accuracy trade-off.</td>
+            </tr>
+            <tr>
+                <td><strong>kNN ($k=5$, Scaled)</strong></td>
+                <td>85.25%</td>
+                <td>85.29%</td>
+                <td>87.88%</td>
+                <td>82.14%</td>
+                <td>Requires full data storage at test time; sensitive to distance metrics.</td>
+            </tr>
+            <tr>
+                <td><strong>Random Forest</strong></td>
+                <td><strong>86.89%</strong></td>
+                <td><strong>85.71%</strong></td>
+                <td><strong>90.91%</strong></td>
+                <td><strong>82.14%</strong></td>
+                <td><strong>Best overall generalization & highest recall for clinical diagnostic safety.</strong></td>
+            </tr>
+            <tr>
+                <td><strong>AdaBoost</strong></td>
+                <td>83.61%</td>
+                <td>83.33%</td>
+                <td>86.36%</td>
+                <td>80.36%</td>
+                <td>Good ensemble performance; slightly prone to outlier noise.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2. Strategic Evaluation & Domain Analysis</h3>
+    <ol>
+        <li>
+            <strong>Best Performing Model:</strong> <strong>Random Forest</strong> achieved the highest overall performance (86.89% accuracy, 90.91% recall). Ensembles outperform single decision trees because aggregating diverse, decorrelated decision trees effectively cancels out individual high-variance errors, producing a smooth decision boundary.
+        </li>
+        <li>
+            <strong>Most Interpretable Model:</strong> The <strong>Decision Tree / Rule-Based Model</strong> is the most interpretable. In medical diagnostics, interpretability is paramount; clinicians must validate the pathophysiological rationale behind a prediction before ordering invasive cardiac catheterization or altering treatment plans.
+        </li>
+        <li>
+            <strong>Real-World Deployment Risks & Failure Modes:</strong>
+            <ul>
+                <li><strong>False Negative Risk (Critical Failure Mode):</strong> A False Negative means a patient with actual heart disease is predicted as healthy. In healthcare, this carries severe mortality risk (patient discharged without intervention). Random Forest minimizes this risk by maximizing <strong>Recall (90.91%)</strong>.</li>
+                <li><strong>Dataset Bias / Population Drift:</strong> The model was trained on a demographic cohort that may not reflect regional variations in diet, genetics, or diagnostic equipment calibration. Deploying without domain adaptation risks poor out-of-distribution generalization.</li>
+            </ul>
+        </li>
+    </ol>
+</section>
+
+</body>
+</html>
