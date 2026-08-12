@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Spark: Architecture & Ecosystem Guide</title>
+    <style>
+        :root {
+            --primary: #e25a1c;
+            --primary-light: #f97316;
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #243347;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+            --accent-purple: #c084fc;
+            --accent-amber: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            background: linear-gradient(135deg, rgba(226, 90, 28, 0.15), rgba(15, 23, 42, 0.8));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-amber), var(--accent-blue));
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(226, 90, 28, 0.2);
+            color: var(--primary-light);
+            border: 1px solid rgba(226, 90, 28, 0.4);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .section-title span {
+            color: var(--primary-light);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(226, 90, 28, 0.5);
+            background-color: var(--bg-card-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .icon-orange { background: rgba(249, 115, 22, 0.15); color: var(--primary-light); }
+        .icon-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
+        .icon-purple { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); }
+        .icon-green { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+        .icon-amber { background: rgba(251, 191, 36, 0.15); color: var(--accent-amber); }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Ecosystem Table / Cards */
+        .eco-card {
+            border-left: 4px solid var(--border-color);
+        }
+
+        .eco-card.sql { border-left-color: var(--accent-blue); }
+        .eco-card.streaming { border-left-color: var(--accent-green); }
+        .eco-card.ml { border-left-color: var(--accent-purple); }
+        .eco-card.graph { border-left-color: var(--accent-amber); }
+
+        /* Architecture Diagram Box */
+        .arch-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .node-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .driver-node {
+            border-color: var(--primary-light);
+            background: rgba(226, 90, 28, 0.1);
+        }
+
+        .cluster-manager {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .workers-wrapper {
+            display: flex;
+            gap: 1.5rem;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .worker-node {
+            flex: 1;
+            min-width: 280px;
+            border-color: var(--accent-purple);
+            background: rgba(192, 132, 252, 0.05);
+        }
+
+        .executor-box {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px dashed var(--accent-purple);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .arrow-down {
+            width: 2px;
+            height: 24px;
+            background-color: var(--text-secondary);
+            position: relative;
+        }
+
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--text-secondary);
+        }
+
+        .arch-desc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        /* Language Badges */
+        .language-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+
+        .lang-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo-badge">⚡ Big Data Framework</div>
+            <h1>Apache Spark Architecture Guide</h1>
+            <p class="subtitle">An open-source, distributed processing engine designed for fast, large-scale analytics across big datasets. Spark unifies batch processing, real-time streaming, machine learning, and interactive SQL queries.</p>
+        </header>
+
+        <!-- Core Architectural Features -->
+        <section>
+            <h2 class="section-title"><span>01.</span> Core Architectural Features</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-orange">⚡</div>
+                        <div class="card-title">In-Memory Processing</div>
+                    </div>
+                    <p class="card-text">
+                        Unlike traditional frameworks like Hadoop MapReduce that constantly read and write intermediate results to disk, Spark processes and caches data in RAM. This delivers up to 100x faster execution for complex, iterative workloads.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue">🔄</div>
+                        <div class="card-title">Resilient Distributed Datasets (RDDs)</div>
+                    </div>
+                    <p class="card-text">
+                        The core abstraction in Spark. RDDs partition data across a cluster and automatically track lineage operations. If a node fails, Spark reconstructs lost partitions seamlessly without re-running the whole job.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple">🧠</div>
+                        <div class="card-title">Lazy Evaluation</div>
+                    </div>
+                    <p class="card-text">
+                        Spark delays executing data transformations until an explicit action (e.g., <code>count()</code>, <code>save()</code>) is triggered. It optimizes the execution plan via a Directed Acyclic Graph (DAG) before execution.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-green">🌐</div>
+                        <div class="card-title">Polyglot API Support</div>
+                    </div>
+                    <p class="card-text">
+                        Developers can write scalable data pipelines in multiple programming languages with equal efficiency and seamless abstraction.
+                    </p>
+                    <div class="language-tags">
+                        <span class="lang-tag">Python (PySpark)</span>
+                        <span class="lang-tag">Scala</span>
+                        <span class="lang-tag">Java</span>
+                        <span class="lang-tag">SQL</span>
+                        <span class="lang-tag">R</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Built-in Libraries Ecosystem -->
+        <section>
+            <h2 class="section-title"><span>02.</span> Built-in Libraries Ecosystem</h2>
+            <div class="grid-4">
+                <div class="card eco-card sql">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue">📊</div>
+                        <div class="card-title">Spark SQL</div>
+                    </div>
+                    <p class="card-text">Supports structured and semi-structured data manipulation using ANSI SQL or high-level DataFrames.</p>
+                </div>
+
+                <div class="card eco-card streaming">
+                    <div class="card-header">
+                        <div class="card-icon icon-green">🌊</div>
+                        <div class="card-title">Structured Streaming</div>
+                    </div>
+                    <p class="card-text">Scalable, fault-tolerant stream processing engine built on the Spark SQL engine for real-time analytics.</p>
+                </div>
+
+                <div class="card eco-card ml">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple">🤖</div>
+                        <div class="card-title">MLlib</div>
+                    </div>
+                    <p class="card-text">Scalable machine learning library providing algorithms for classification, regression, clustering, and filtering.</p>
+                </div>
+
+                <div class="card eco-card graph">
+                    <div class="card-header">
+                        <div class="card-icon icon-amber">🕸️</div>
+                        <div class="card-title">GraphX</div>
+                    </div>
+                    <p class="card-text">API for graphs and graph-parallel computation, enabling network analysis and structural relationships.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cluster Execution Architecture -->
+        <section>
+            <h2 class="section-title"><span>03.</span> Cluster Execution Architecture</h2>
+            <div class="arch-container">
+                <div class="arch-diagram">
+                    <!-- Driver Node -->
+                    <div class="node-box driver-node">
+                        <strong>Driver Node</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">SparkContext / SparkSession</div>
+                    </div>
+
+                    <div class="arrow-down"></div>
+
+                    <!-- Cluster Manager -->
+                    <div class="node-box cluster-manager">
+                        <strong>Cluster Manager</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">YARN | Kubernetes | Standalone</div>
+                    </div>
+
+                    <div class="arrow-down"></div>
+
+                    <!-- Worker Nodes -->
+                    <div class="workers-wrapper">
+                        <div class="node-box worker-node">
+                            <strong>Worker Node 1</strong>
+                            <div class="executor-box">
+                                <strong>Executor Process</strong>
+                                <div>Tasks | In-Memory Cache</div>
+                            </div>
+                        </div>
+                        <div class="node-box worker-node">
+                            <strong>Worker Node 2</strong>
+                            <div class="executor-box">
+                                <strong>Executor Process</strong>
+                                <div>Tasks | In-Memory Cache</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node Description Grid -->
+                <div class="arch-desc-grid">
+                    <div>
+                        <h4 style="color: var(--primary-light); margin-bottom: 0.25rem;">Driver Node</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                            Houses the main program, converts user code into execution stages (DAG), and coordinates task scheduling across worker nodes.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-blue); margin-bottom: 0.25rem;">Cluster Manager</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                            Allocates physical cluster resources (CPU/Memory) across worker nodes. Compatible with YARN, Kubernetes, or Spark Standalone.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-purple); margin-bottom: 0.25rem;">Worker Nodes & Executors</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                            Executors are persistent processes running on worker machines that execute computational tasks in parallel and store cached data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Use Cases -->
+        <section>
+            <h2 class="section-title"><span>04.</span> Common Industry Use Cases</h2>
+            <div class="grid-4">
+                <div class="card">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 1.1rem;">ETL Data Pipelines</h3>
+                    <p class="card-text">
+                        Extracting, transforming, and loading petabytes of raw structured and unstructured data from cloud storage (S3, ADLS) or HDFS.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--accent-green); margin-bottom: 0.5rem; font-size: 1.1rem;">Real-time Streaming</h3>
+                    <p class="card-text">
+                        Processing live event streams, fraud detection alerts, clickstream analytics, and IoT telemetry integrated with Apache Kafka.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--accent-purple); margin-bottom: 0.5rem; font-size: 1.1rem;">Large-scale ML & AI</h3>
+                    <p class="card-text">
+                        Feature engineering, distributed model training, hyperparameter tuning, and recommendation systems on massive datasets.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--accent-amber); margin-bottom: 0.5rem; font-size: 1.1rem;">Interactive Analytics</h3>
+                    <p class="card-text">
+                        Running fast, ad-hoc SQL queries on petabyte-scale data lakes for business intelligence dashboarding and data exploration.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Apache Spark™ Architecture Summary • Generated for Quick Reference</p>
+    </footer>
+
+</body>
+</html>
+"""
+
+output_path = "apache_spark_guide.html"
+with open(output_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"HTML generated at {output_path}")
+
