@@ -1,0 +1,401 @@
+import os
+from weasyprint import HTML
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 18mm 15mm;
+    background-color: #f8fafc;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 9pt;
+      color: #64748b;
+    }
+    @bottom-left {
+      content: "HTML, CSS & UI Design Implementation Standards";
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 9pt;
+      color: #64748b;
+    }
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #f8fafc;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  }
+
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 20pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+  }
+
+  .header p {
+    margin: 0;
+    font-size: 10.5pt;
+    color: #94a3b8;
+  }
+
+  .section-title {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 22px 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #cbd5e1;
+    page-break-after: avoid;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    page-break-inside: avoid;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    color: #334155;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9pt;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 9.5pt;
+  }
+
+  th {
+    background-color: #f1f5f9;
+    color: #475569;
+    text-align: left;
+    padding: 9px 12px;
+    font-weight: 600;
+    border-bottom: 2px solid #cbd5e1;
+    text-transform: uppercase;
+    font-size: 8pt;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .theme-subtitle {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+
+  .color-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 8.5pt;
+    font-weight: 600;
+  }
+
+  .link-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .link-card {
+    padding: 10px 12px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+  }
+
+  .link-title {
+    font-weight: 700;
+    color: #2563eb;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 9.5pt;
+  }
+
+  .link-url {
+    font-size: 8pt;
+    color: #64748b;
+    font-family: monospace;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>HTML, CSS & UI Design Standards</h1>
+    <p>Comprehensive Master Guide: Layouts, Color Themes, Typography Specs & Resources</p>
+  </div>
+
+  <!-- Section 1: Core Fundamentals -->
+  <div class="section-title">1. Core HTML & CSS Basics</div>
+  <div class="card">
+    <ul>
+      <li><strong>Semantic HTML Structure:</strong> Utilize native semantic layout elements (<code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>) rather than non-semantic <code>&lt;div&gt;</code> wrappers to ensure high accessibility and predictable document architecture.</li>
+      <li><strong>The CSS Box Model:</strong> Understand the structure of every rendered element: <strong>Content → Padding → Border → Margin</strong>. Enforce border-box sizing globally via <code>box-sizing: border-box</code> so explicit <code>width</code> and <code>height</code> properties include padding and borders without overflowing bounds.</li>
+      <li><strong>Modern Layout Engines:</strong> Combine <strong>CSS Grid</strong> for macro-level layouts (dashboard panels, kanban column systems, grid cards) with <strong>CSS Flexbox</strong> for micro-level alignments (navbar content, icon-text alignment, button groups).</li>
+    </ul>
+  </div>
+
+  <!-- Section 2: Precise Color Palette & Theme Specifications -->
+  <div class="section-title">2. Color Palettes & Theme Specifications</div>
+  <div class="card">
+    <div class="theme-subtitle">Light Theme Specification</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Element</th>
+          <th style="width: 25%;">Hex Code</th>
+          <th style="width: 50%;">Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Background</strong></td>
+          <td><span class="color-badge" style="background: #F8F9FA; color: #212529; border: 1px solid #cbd5e1;">#F8F9FA</span></td>
+          <td>Off-white to reduce glare.</td>
+        </tr>
+        <tr>
+          <td><strong>Surface</strong></td>
+          <td><span class="color-badge" style="background: #FFFFFF; color: #212529; border: 1px solid #cbd5e1;">#FFFFFF</span></td>
+          <td>For cards, modals, and raised elements.</td>
+        </tr>
+        <tr>
+          <td><strong>Primary Text</strong></td>
+          <td><span class="color-badge" style="background: #212529; color: #FFFFFF;">#212529</span></td>
+          <td>Deep charcoal for high legibility.</td>
+        </tr>
+        <tr>
+          <td><strong>Secondary Text</strong></td>
+          <td><span class="color-badge" style="background: #6C757D; color: #FFFFFF;">#6C757D</span></td>
+          <td>For captions and less important info.</td>
+        </tr>
+        <tr>
+          <td><strong>Accent / Brand</strong></td>
+          <td><span class="color-badge" style="background: #007BFF; color: #FFFFFF;">#007BFF</span></td>
+          <td>Primary interactive elements & active states.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="theme-subtitle" style="margin-top: 18px;">Dark Theme Specification</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Element</th>
+          <th style="width: 25%;">Hex Code</th>
+          <th style="width: 50%;">Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Background</strong></td>
+          <td><span class="color-badge" style="background: #121212; color: #E9ECEF;">#121212</span></td>
+          <td>Deep grey (Material standard) to allow for shadows.</td>
+        </tr>
+        <tr>
+          <td><strong>Surface</strong></td>
+          <td><span class="color-badge" style="background: #1E1E1E; color: #E9ECEF;">#1E1E1E</span></td>
+          <td>Slightly lighter to create depth.</td>
+        </tr>
+        <tr>
+          <td><strong>Primary Text</strong></td>
+          <td><span class="color-badge" style="background: #E9ECEF; color: #121212;">#E9ECEF</span></td>
+          <td>Soft white to prevent "bleeding" or "halo" effects.</td>
+        </tr>
+        <tr>
+          <td><strong>Secondary Text</strong></td>
+          <td><span class="color-badge" style="background: #ADB5BD; color: #121212;">#ADB5BD</span></td>
+          <td>Muted grey for metadata.</td>
+        </tr>
+        <tr>
+          <td><strong>Accent / Brand</strong></td>
+          <td><span class="color-badge" style="background: #375A7F; color: #FFFFFF;">#375A7F</span></td>
+          <td>Desaturated blue (bright colors can be harsh in dark mode).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 3: Typography System -->
+  <div class="section-title">3. Typography Hierarchy & Rules</div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Style</th>
+          <th style="width: 25%;">Size (px)</th>
+          <th style="width: 25%;">Weight</th>
+          <th style="width: 25%;">Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Heading 1</strong></td>
+          <td>32px – 40px</td>
+          <td>Bold (700)</td>
+          <td>Page titles</td>
+        </tr>
+        <tr>
+          <td><strong>Heading 2</strong></td>
+          <td>24px – 28px</td>
+          <td>Semi-Bold (600)</td>
+          <td>Section headers</td>
+        </tr>
+        <tr>
+          <td><strong>Body Large</strong></td>
+          <td>18px</td>
+          <td>Regular (400)</td>
+          <td>Introduction text</td>
+        </tr>
+        <tr>
+          <td><strong>Body Main</strong></td>
+          <td>16px</td>
+          <td>Regular (400)</td>
+          <td>Standard reading text</td>
+        </tr>
+        <tr>
+          <td><strong>Small / Caption</strong></td>
+          <td>12px – 14px</td>
+          <td>Regular (400)</td>
+          <td>Labels, hints, and footer text</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 4: Implementation Guidelines -->
+  <div class="section-title">4. Implementation Guidelines</div>
+  <div class="card">
+    <ul>
+      <li><strong>Design Tokens & CSS Variables:</strong> Define system values inside the <code>:root</code> selector (e.g., <code>--color-bg-primary</code>, <code>--spacing-md</code>, <code>--radius-lg</code>). Toggling light/dark themes will require updating root variables rather than duplicate component classes.</li>
+      <li><strong>Interactive Affordances:</strong> Always provide transition feedback on hover, focus, and active states (e.g., <code>transition: background-color 0.2s ease, transform 0.1s ease</code>).</li>
+      <li><strong>Depth & Elevation (Box Shadow):</strong> Indicate interactive layers using shadow scales:
+        <ul>
+          <li><strong>Cards/Containers:</strong> <code>box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);</code></li>
+          <li><strong>Modals/Dragging Items:</strong> <code>box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);</code></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Section 5: Design Resources & Reference Links -->
+  <div class="section-title">5. Design Resources & Reference Links</div>
+  <div class="link-grid">
+    <div class="link-card">
+      <span class="link-title">Color Hunt</span>
+      <span class="link-url">https://share.google/iWuWqMaxgpu8blF9Q</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Flat UI Colors</span>
+      <span class="link-url">https://flatuicolors.com/?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Google Fonts</span>
+      <span class="link-url">https://fonts.google.com/?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Dribbble - Light & Dark Theme</span>
+      <span class="link-url">https://dribbble.com/tags/light-dark-theme?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Adobe Color</span>
+      <span class="link-url">https://color.adobe.com/?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Typewolf</span>
+      <span class="link-url">https://www.typewolf.com/?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">Fontpair</span>
+      <span class="link-url">https://www.fontpair.co/?hl=en-US</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">MDN Web Docs: CSS Box Model</span>
+      <span class="link-url">https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">CSS-Tricks: Guide to Flexbox</span>
+      <span class="link-url">https://css-tricks.com/snippets/css/a-guide-to-flexbox/</span>
+    </div>
+    <div class="link-card">
+      <span class="link-title">CSS-Tricks: Guide to Grid</span>
+      <span class="link-url">https://css-tricks.com/snippets/css/complete-guide-grid/</span>
+    </div>
+  </div>
+
+</body>
+</html>
+"""
+
+html_path = "html_css_design_master_guide.html"
+pdf_path = "html_css_design_master_guide.pdf"
+
+with open(html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+HTML(filename=html_path).write_pdf(pdf_path)
+print(f"Generated PDF successfully: {pdf_path}")

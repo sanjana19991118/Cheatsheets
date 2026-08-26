@@ -1,0 +1,28 @@
+MyMvcApp/
+├── Controllers/
+│   ├── HomeController.cs
+│   └── AccountController.cs
+├── Models/
+│   ├── ErrorViewModel.cs
+│   └── UserViewModel.cs
+├── Views/
+│   ├── Home/
+│   │   ├── Index.cshtml
+│   │   └── Privacy.cshtml
+│   ├── Shared/
+│   │   ├── _Layout.cshtml
+│   │   ├── _ValidationScriptsPartial.cshtml
+│   │   └── Error.cshtml
+│   ├── _ViewImports.cshtml
+│   └── _ViewStart.cshtml
+├── wwwroot/
+│   ├── css/
+│   ├── js/
+│   └── lib/
+├── Data/ (or Infrastructure/)
+│   └── ApplicationDbContext.cs
+├── Services/
+│   ├── IUserService.cs
+│   └── UserService.cs
+├── appsettings.json
+└── Program.cs
