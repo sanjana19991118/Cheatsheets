@@ -1,0 +1,119 @@
+# AI Engineering & LLM Learning Roadmap
+
+> **Study Cadence:** Complete one stage every 4 weeks and build one hands-on project per stage.[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)
+
+---
+
+## Stage 1: Foundations
+- [ ] **Zero to Hero** — [karpathy.ai/zero-to-hero.html](https://karpathy.ai/zero-to-hero.html)[span_5](start_span)[span_5](end_span)
+- [ ] **3Blue1Brown Neural Networks** — [YouTube Playlist](https://youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)[span_6](start_span)[span_6](end_span)
+- [ ] **MIT 6.S191: Introduction to Deep Learning** — [introtodeeplearning.com](https://introtodeeplearning.com)[span_7](start_span)[span_7](end_span)
+- [ ] **CS50's Introduction to AI with Python** — [cs50.harvard.edu/ai](https://cs50.harvard.edu/ai)[span_8](start_span)[span_8](end_span)
+- [ ] **Google Machine Learning Crash Course** — [developers.google.com/machine-learning/crash-course](https://developers.google.com/machine-learning/crash-course)[span_9](start_span)[span_9](end_span)
+
+**Stage 1 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+
+---
+
+## Stage 2: Large Language Models (LLMs)
+- [ ] **LLM Deep Dive** — [YouTube Video](https://youtube.com/watch?v=7xTGNNLPyMI)[span_10](start_span)[span_10](end_span)
+- [ ] **Stanford CS336: Language Modeling from Scratch** — [cs336.stanford.edu](https://cs336.stanford.edu)[span_11](start_span)[span_11](end_span)
+- [ ] **Stanford CS224N: NLP with Deep Learning** — [YouTube Playlist](https://youtube.com/playlist?list=PLoROMvodv4rOaMFbaqxPDoLWjDaRAdP9D)[span_12](start_span)[span_12](end_span)
+- [ ] **Stanford CME 295** — [cme295.stanford.edu](https://cme295.stanford.edu)[span_13](start_span)[span_13](end_span)
+- [ ] **Stanford CS25: Transformers United** — [web.stanford.edu/class/cs25](https://web.stanford.edu/class/cs25)[span_14](start_span)[span_14](end_span)
+
+**Stage 2 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+
+---
+
+## Stage 3: Building AI Applications
+- [ ] **Hugging Face LLM Course** — [huggingface.co/learn/llm-course](https://huggingface.co/learn/llm-course)[span_15](start_span)[span_15](end_span)
+- [ ] **ChatGPT Prompt Engineering for Developers** — [deeplearning.ai](https://deeplearning.ai/courses/chatgpt-prompt-eng)[span_16](start_span)[span_16](end_span)
+- [ ] **Anthropic Academy** — [anthropic.skilljar.com](https://anthropic.skilljar.com)[span_17](start_span)[span_17](end_span)
+- [ ] **Microsoft Generative AI for Beginners** — [GitHub Repo](https://github.com/microsoft/generative-ai-for-beginners)[span_18](start_span)[span_18](end_span)
+- [ ] **Full Stack LLM Bootcamp** — [fullstackdeeplearning.com/llm-bootcamp](https://fullstackdeeplearning.com/llm-bootcamp)[span_19](start_span)[span_19](end_span)
+
+**Stage 3 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+
+---
+
+## Stage 4: Retrieval-Augmented Generation (RAG)
+- [ ] **LLM Zoomcamp (DataTalksClub)** — [GitHub Repo](https://github.com/DataTalksClub/llm-zoomcamp)[span_20](start_span)[span_20](end_span)[span_21](start_span)[span_21](end_span)
+- [ ] **RAG From Scratch (LangChain)** — [GitHub Repo](https://github.com/langchain-ai/rag-from-scratch)[span_22](start_span)[span_22](end_span)[span_23](start_span)[span_23](end_span)
+- [ ] **Building & Evaluating Advanced RAG** — [deeplearning.ai](https://deeplearning.ai/courses/building-evaluating-advanced-rag)[span_24](start_span)[span_24](end_span)[span_25](start_span)[span_25](end_span)
+- [ ] **Vector Databases: From Embeddings to Applications** — [deeplearning.ai](https://deeplearning.ai/courses/vector-databases-embeddings-applications)[span_26](start_span)[span_26](end_span)[span_27](start_span)[span_27](end_span)
+- [ ] **Knowledge Graphs for RAG** — [deeplearning.ai](https://deeplearning.ai/courses/knowledge-graphs-rag)[span_28](start_span)[span_28](end_span)
+
+**Stage 4 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+
+---
+
+## Stage 5: AI Agents & MCP
+- [ ] **Hugging Face Agents Course** — [huggingface.co/learn/agents-course](https://huggingface.co/learn/agents-course)[span_29](start_span)[span_29](end_span)[span_30](start_span)[span_30](end_span)
+- [ ] **Berkeley LLM Agents (Fall 2024)** — [llmagents-learning.org/f24](https://llmagents-learning.org/f24)[span_31](start_span)[span_31](end_span)[span_32](start_span)[span_32](end_span)
+- [ ] **Berkeley Agentic AI (Fall 2025)** — [agenticai-learning.org/f25](https://agenticai-learning.org/f25)[span_33](start_span)[span_33](end_span)[span_34](start_span)[span_34](end_span)
+- [ ] **Microsoft AI Agents for Beginners** — [GitHub Repo](https://github.com/microsoft/ai-agents-for-beginners)[span_35](start_span)[span_35](end_span)[span_36](start_span)[span_36](end_span)
+- [ ] **Hugging Face MCP (Model Context Protocol) Course** — [huggingface.co/learn/mcp-course](https://huggingface.co/learn/mcp-course)[span_37](start_span)[span_37](end_span)[span_38](start_span)[span_38](end_span)
+
+**Stage 5 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+
+---
+
+## Stage 6: Fine-Tuning, Evaluation & Serving
+- [ ] **Mastering LLMs (Parlance Labs)** — [parlance-labs.com/education](https://parlance-labs.com/education)[span_39](start_span)[span_39](end_span)[span_40](start_span)[span_40](end_span)
+- [ ] **Hugging Face smol course** — [GitHub Repo](https://github.com/huggingface/smol-course)[span_41](start_span)[span_41](end_span)[span_42](start_span)[span_42](end_span)
+- [ ] **Evaluating AI Agents** — [deeplearning.ai](https://deeplearning.ai/courses/evaluating-ai-agents)[span_43](start_span)[span_43](end_span)[span_44](start_span)[span_44](end_span)
+- [ ] **Efficiently Serving LLMs** — [deeplearning.ai](https://deeplearning.ai/courses/efficiently-serving-llms)[span_45](start_span)[span_45](end_span)[span_46](start_span)[span_46](end_span)
+- [ ] **Made With ML** — [madewithml.com](https://madewithml.com)[span_47](start_span)[span_47](end_span)[span_48](start_span)[span_48](end_span)
+
+**Stage 6 Project:**
+- [ ] *Project Title & Repo Link:* `TBD`
+-
+
+
+
+
+-----
+Here are all 30 AI learning resource links extracted and organized by section from your screenshots:
+FOUNDATIONS
+ * Zero to Hero: https://karpathy.ai/zero-to-hero.html
+ * 3Blue1Brown NNs: https://youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
+ * MIT 6.S191: https://introtodeeplearning.com
+ * CS50 AI: https://cs50.harvard.edu/ai
+ * Google MLCC: https://developers.google.com/machine-learning/crash-course
+LLMS
+ * LLM Deep Dive: https://youtube.com/watch?v=7xTGNNLPyMI
+ * CS336: https://cs336.stanford.edu
+ * CS224N: https://youtube.com/playlist?list=PLoROMvodv4rOaMFbaqxPDoLWjDaRAdP9D
+ * CME 295: https://cme295.stanford.edu
+ * CS25: https://web.stanford.edu/class/cs25
+BUILD APPS
+ * HF LLM Course: https://huggingface.co/learn/llm-course
+ * Prompt Eng for Devs: https://deeplearning.ai/courses/chatgpt-prompt-eng
+ * Anthropic Academy: https://anthropic.skilljar.com
+ * GenAI for Beginners: https://github.com/microsoft/generative-ai-for-beginners
+ * LLM Bootcamp: https://fullstackdeeplearning.com/llm-bootcamp
+RAG
+ * LLM Zoomcamp: https://github.com/DataTalksClub/llm-zoomcamp
+ * RAG From Scratch: https://github.com/langchain-ai/rag-from-scratch
+ * Advanced RAG: https://deeplearning.ai/courses/building-evaluating-advanced-rag
+ * Vector Databases: https://deeplearning.ai/courses/vector-databases-embeddings-applications
+ * Knowledge Graphs: https://deeplearning.ai/courses/knowledge-graphs-rag
+AGENTS
+ * HF Agents Course: https://huggingface.co/learn/agents-course
+ * Berkeley LLM Agents: https://llmagents-learning.org/f24
+ * Berkeley Agentic AI: https://agenticai-learning.org/f25
+ * Agents for Beginners: https://github.com/microsoft/ai-agents-for-beginners
+ * MCP Course: https://huggingface.co/learn/mcp-course
+FINE-TUNE, EVAL, SERVE
+ * Mastering LLMs: https://parlance-labs.com/education
+ * smol course: https://github.com/huggingface/smol-course
+ * Evaluating Agents: https://deeplearning.ai/courses/evaluating-ai-agents
+ * Serving LLMs: https://deeplearning.ai/courses/efficiently-serving-llms
+ * Made With ML: https://madewithml.com
+Would you like me to turn this list into a study checklist, a Markdown/text file, or a structured study schedule (such as the "one stage every 4 weeks" approach mentioned in the post)?
